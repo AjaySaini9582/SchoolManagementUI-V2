@@ -1,0 +1,31 @@
+<div class="route-summary">
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="4rem" />
+      <app-skeleton height="4rem" />
+    </div>
+  } @else if (routes().length === 0) {
+    <app-empty-state icon="alt_route" title="No routes configured" description="Add bus routes and stoppages from Setup first." />
+  } @else {
+    <p class="total-line">{{ totalStudents() }} students across {{ routes().length }} route(s).</p>
+
+    <div class="route-cards">
+      @for (route of routes(); track route.busRouteId) {
+        <div class="route-card">
+          <div class="route-card-header">
+            <h3>{{ route.routeName }}</h3>
+            <span class="route-total">{{ routeTotal(route) }} students</span>
+          </div>
+          <div class="stoppage-table">
+            @for (stoppage of route.stoppages; track stoppage.busStoppageId) {
+              <div class="stoppage-row">
+                <span>{{ stoppage.stoppageName }}</span>
+                <span class="stoppage-count">{{ stoppage.studentCount }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

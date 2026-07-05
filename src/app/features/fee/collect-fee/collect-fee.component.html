@@ -1,0 +1,152 @@
+<div class="collect-fee">
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+    </div>
+  } @else {
+    <form [formGroup]="pickerForm" class="picker-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Class - Section</mat-label>
+        <mat-select formControlName="classSectionId">
+          @for (cls of classSections(); track cls.id) {
+            @for (section of cls.sections; track section.id) {
+              <mat-option [value]="section.id">{{ cls.name }} - {{ section.name }}</mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Student</mat-label>
+        <mat-select formControlName="studentId" [disabled]="roster().length === 0">
+          @for (student of roster(); track student.id) {
+            <mat-option [value]="student.id">{{ student.name }} @if (student.rollNumber) {
+              (Roll {{ student.rollNumber }})
+            }</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    @if (loadingRoster() || loadingStudent()) {
+      <div class="skeleton-rows">
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+      </div>
+    } @else if (!pickerForm.controls.studentId.value) {
+      <app-empty-state
+        icon="payments"
+        title="Select a student"
+        description="Pick a class-section and student to collect fee or view fee due."
+      />
+    } @else {
+      @if (due(); as summary) {
+        <div class="due-summary">
+          <div class="due-cell">
+            <span class="due-label">Total Expected</span>
+            <span class="due-value">₹{{ summary.totalExpected }}</span>
+          </div>
+          <div class="due-cell">
+            <span class="due-label">Total Paid</span>
+            <span class="due-value">₹{{ summary.totalPaid }}</span>
+          </div>
+          <div class="due-cell" [class.due-cell-negative]="summary.due > 0">
+            <span class="due-label">Due</span>
+            <span class="due-value">₹{{ summary.due }}</span>
+          </div>
+        </div>
+      }
+
+      <form [formGroup]="collectForm" (ngSubmit)="collect()" class="collect-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Pay Mode</mat-label>
+          <mat-select formControlName="paymodeId">
+            @for (mode of payModes(); track mode.id) {
+              <mat-option [value]="mode.id">{{ mode.type }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fee Category</mat-label>
+          <mat-select formControlName="feeCategoryId">
+            @for (category of feeCategories(); track category.id) {
+              <mat-option [value]="category.id">{{ category.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" formControlName="amount" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fine Amount</mat-label>
+          <input matInput type="number" formControlName="fineAmount" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Discount Amount</mat-label>
+          <input matInput type="number" formControlName="discountAmount" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Payment Date</mat-label>
+          <input matInput type="date" formControlName="paymentDate" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Remark</mat-label>
+          <input matInput formControlName="remark" />
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+            @if (saving()) {
+              <mat-spinner diameter="20" />
+            } @else {
+              Collect Fee
+            }
+          </button>
+        </div>
+      </form>
+
+      <h3>Receipt History</h3>
+      @if (receipts().length === 0) {
+        <p class="no-receipts">No receipts yet for this student.</p>
+      } @else {
+        <div class="receipts-table">
+          <div class="receipts-header">
+            <span>Receipt No.</span>
+            <span>Date</span>
+            <span>Pay Mode</span>
+            <span>Amount</span>
+            <span>Status</span>
+            <span>Actions</span>
+          </div>
+          @for (receipt of receipts(); track receipt.id) {
+            <div class="receipts-row" [class.cancelled]="receipt.isCancelled">
+              <span>{{ receipt.receiptNumber }}</span>
+              <span>{{ receipt.paymentDate }}</span>
+              <span>{{ receipt.paymodeType }}</span>
+              <span>₹{{ receipt.amount + receipt.fineAmount - receipt.discountAmount }}</span>
+              <span>{{ receipt.isCancelled ? 'Cancelled' : 'Active' }}</span>
+              <span class="row-actions">
+                <button mat-icon-button title="View / Print" (click)="viewReceipt(receipt)">
+                  <mat-icon>print</mat-icon>
+                </button>
+                @if (!receipt.isCancelled) {
+                  <button mat-icon-button title="Cancel Receipt" (click)="cancelReceipt(receipt)">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                }
+              </span>
+            </div>
+          }
+        </div>
+      }
+    }
+  }
+</div>

@@ -1,0 +1,56 @@
+// Shared partial for Setup's bespoke tabs (pay-modes, exam-types,
+// bus-stoppages, houses) — each `@use`s this rather than repeating the same
+// inline-form/table chrome four times. View encapsulation still applies:
+// Sass just textually includes these rules into each component's own
+// scoped stylesheet.
+@mixin tab-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+@mixin tab-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@mixin inline-form {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+@mixin form-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: center;
+}
+
+@mixin skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@mixin status-chip {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 0.75rem;
+
+  &.active {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+}
+
+@mixin actions-cell {
+  text-align: right;
+}

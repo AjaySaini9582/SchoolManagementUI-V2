@@ -1,0 +1,81 @@
+.fee-receipt-page {
+  padding: 1.5rem;
+  max-width: 500px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.receipt {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 1.5rem;
+
+  h1 {
+    margin: 0 0 1rem;
+    font-size: 1.4rem;
+  }
+}
+
+.cancelled-banner {
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: #ffebee;
+  color: #c62828;
+  font-weight: 500;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.receipt-label {
+  opacity: 0.65;
+}
+
+.receipt-value {
+  font-weight: 500;
+}
+
+.amount-table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+
+  td {
+    padding: 0.35rem 0;
+  }
+
+  td:last-child {
+    text-align: right;
+  }
+
+  .total-row td {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    padding-top: 0.5rem;
+  }
+}
+
+.remark {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+@media print {
+  .fee-receipt-page {
+    max-width: none;
+  }
+
+  .receipt {
+    border: none;
+  }
+}

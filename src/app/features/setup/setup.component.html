@@ -1,0 +1,86 @@
+<div class="setup-page">
+  <h1>Setup</h1>
+
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab label="Classes & Sections">
+      <ng-template matTabContent>
+        <app-classes-tab />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Sessions">
+      <ng-template matTabContent>
+        <app-sessions-tab />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Departments">
+      <ng-template matTabContent>
+        <app-master-list-container
+          label="Department"
+          [fetchList]="fetchDepartments"
+          [saveItem]="saveDepartment"
+          [deactivateItem]="deactivateDepartment"
+        />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Designations">
+      <ng-template matTabContent>
+        <app-master-list-container
+          label="Designation"
+          [fetchList]="fetchDesignations"
+          [saveItem]="saveDesignation"
+          [deactivateItem]="deactivateDesignation"
+        />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Subjects">
+      <ng-template matTabContent>
+        <app-master-list-container label="Subject" [fetchList]="fetchSubjects" [saveItem]="saveSubject" [deactivateItem]="deactivateSubject" />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Assign Subjects">
+      <ng-template matTabContent>
+        <app-assign-subjects-tab />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Pay Modes">
+      <ng-template matTabContent>
+        <app-pay-modes-tab />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Exam Types">
+      <ng-template matTabContent>
+        <app-exam-types-tab />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Bus Routes">
+      <ng-template matTabContent>
+        <app-master-list-container
+          label="Bus Route"
+          [fetchList]="fetchBusRoutes"
+          [saveItem]="saveBusRoute"
+          [deactivateItem]="deactivateBusRoute"
+        />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Bus Stoppages">
+      <ng-template matTabContent>
+        <app-bus-stoppages-tab />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Houses">
+      <ng-template matTabContent>
+        <app-houses-tab />
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

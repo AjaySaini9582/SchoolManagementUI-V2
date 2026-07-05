@@ -1,0 +1,19 @@
+.employees-page {
+  padding: 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.page-header-actions {
+  display: flex;
+  gap: 0.5rem;
+}

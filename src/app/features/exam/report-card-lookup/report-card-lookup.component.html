@@ -1,0 +1,91 @@
+<div class="report-card-lookup">
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="picker-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Class - Section</mat-label>
+        <mat-select formControlName="classSectionId">
+          @for (cls of classSections(); track cls.id) {
+            @for (section of cls.sections; track section.id) {
+              <mat-option [value]="section.id">{{ cls.name }} - {{ section.name }}</mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Student</mat-label>
+        <mat-select formControlName="studentId" [disabled]="roster().length === 0">
+          @for (student of roster(); track student.id) {
+            <mat-option [value]="student.id">{{ student.name }} @if (student.rollNumber) {
+              (Roll {{ student.rollNumber }})
+            }</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Exam Type</mat-label>
+        <mat-select formControlName="examTypeId">
+          @for (type of examTypes(); track type.id) {
+            <mat-option [value]="type.id">{{ type.type }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    @if (loadingRoster() || loadingReport()) {
+      <div class="skeleton-rows">
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+      </div>
+    } @else if (!reportCard()) {
+      <app-empty-state
+        icon="school"
+        title="No report card to show"
+        description="Pick a class-section, student, and exam type to preview the report card."
+      />
+    } @else {
+      <div class="report-preview">
+        <div class="preview-header">
+          <div>
+            <h3>{{ reportCard()!.studentName }}</h3>
+            <p>{{ reportCard()!.examTypeName }}</p>
+          </div>
+          <button mat-flat-button color="primary" (click)="print()">Print Report Card</button>
+        </div>
+
+        <div class="subjects-table">
+          <div class="subjects-header">
+            <span>Subject</span>
+            <span>Marks Obtained</span>
+            <span>Max Marks</span>
+            <span>Result</span>
+          </div>
+          @for (subject of reportCard()!.subjects; track subject.subjectId) {
+            <div class="subjects-row">
+              <span>{{ subject.subjectName }}</span>
+              <span>{{ subject.marksObtained }}</span>
+              <span>{{ subject.maxMarks }}</span>
+              <span class="result-chip" [class.pass]="subject.isPass" [class.fail]="!subject.isPass">
+                {{ subject.isPass ? 'Pass' : 'Fail' }}
+              </span>
+            </div>
+          }
+        </div>
+
+        <div class="summary-row">
+          <span>Total: {{ reportCard()!.totalObtained }} / {{ reportCard()!.totalMax }}</span>
+          <span>Percentage: {{ reportCard()!.percentage }}%</span>
+          <span class="result-chip" [class.pass]="reportCard()!.isPass" [class.fail]="!reportCard()!.isPass">
+            {{ reportCard()!.isPass ? 'Pass' : 'Fail' }}
+          </span>
+        </div>
+      </div>
+    }
+  }
+</div>

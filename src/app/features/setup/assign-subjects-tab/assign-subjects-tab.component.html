@@ -1,0 +1,54 @@
+<div class="assign-subjects-tab">
+  <form [formGroup]="form" (ngSubmit)="assign()" class="assign-form">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Class</mat-label>
+      <mat-select formControlName="classId">
+        @for (option of classOptions(); track option.id) {
+          <mat-option [value]="option.id">{{ option.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <app-field-error [control]="form.controls.classId" />
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Subject</mat-label>
+      <mat-select formControlName="subjectId">
+        @for (option of subjectOptions(); track option.id) {
+          <mat-option [value]="option.id">{{ option.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <app-field-error [control]="form.controls.subjectId" />
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="assigning()">
+      <mat-icon>add</mat-icon>
+      Assign
+    </button>
+  </form>
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1]; track i) {
+        <app-skeleton height="3rem" />
+      }
+    </div>
+  } @else if (assignments().length === 0) {
+    <app-empty-state icon="menu_book" title="No subjects assigned yet" description="Assign a subject to a class above." />
+  } @else {
+    @for (group of assignments(); track group.classId) {
+      <div class="class-group">
+        <h3>{{ group.className }}</h3>
+        <mat-chip-set>
+          @for (subject of group.subjects; track subject.assignmentId) {
+            <mat-chip (removed)="confirmRemove(group.className, subject)">
+              {{ subject.subjectName }}
+              <button matChipRemove title="Remove">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          }
+        </mat-chip-set>
+      </div>
+    }
+  }
+</div>

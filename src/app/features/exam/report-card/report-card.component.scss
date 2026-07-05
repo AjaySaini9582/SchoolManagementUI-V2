@@ -1,0 +1,85 @@
+.report-card-page {
+  padding: 1.5rem;
+  max-width: 600px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.report-card {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 1.5rem;
+
+  h1 {
+    margin: 0 0 1rem;
+    font-size: 1.4rem;
+    text-align: center;
+  }
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.card-label {
+  opacity: 0.65;
+}
+
+.card-value {
+  font-weight: 500;
+}
+
+.subjects-table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.4rem 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  th:not(:first-child),
+  td:not(:first-child) {
+    text-align: right;
+  }
+
+  .total-row td {
+    border-top: 2px solid rgba(0, 0, 0, 0.3);
+    border-bottom: none;
+    font-weight: 600;
+  }
+
+  .pass {
+    color: #2e7d32;
+  }
+
+  .fail {
+    color: #c62828;
+  }
+}
+
+.percentage-line {
+  margin: 1rem 0 0;
+  font-weight: 500;
+  text-align: right;
+}
+
+@media print {
+  .report-card-page {
+    max-width: none;
+  }
+
+  .report-card {
+    border: none;
+  }
+}

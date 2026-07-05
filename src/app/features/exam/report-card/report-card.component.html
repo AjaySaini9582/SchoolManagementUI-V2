@@ -1,0 +1,66 @@
+<div class="report-card-page">
+  <div class="no-print toolbar">
+    <button mat-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Exam
+    </button>
+    @if (reportCard()) {
+      <button mat-flat-button color="primary" (click)="print()">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else if (!reportCard()) {
+    <app-empty-state icon="school" title="Report card not found" description="No marks have been recorded for this student and exam yet." />
+  } @else {
+    <div class="report-card">
+      <h1>Report Card</h1>
+
+      <div class="card-row">
+        <span class="card-label">Student</span>
+        <span class="card-value">{{ reportCard()!.studentName }}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Exam</span>
+        <span class="card-value">{{ reportCard()!.examTypeName }}</span>
+      </div>
+
+      <table class="subjects-table">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Marks Obtained</th>
+            <th>Max Marks</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (subject of reportCard()!.subjects; track subject.subjectId) {
+            <tr>
+              <td>{{ subject.subjectName }}</td>
+              <td>{{ subject.marksObtained }}</td>
+              <td>{{ subject.maxMarks }}</td>
+              <td [class.pass]="subject.isPass" [class.fail]="!subject.isPass">{{ subject.isPass ? 'Pass' : 'Fail' }}</td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td>Total</td>
+            <td>{{ reportCard()!.totalObtained }}</td>
+            <td>{{ reportCard()!.totalMax }}</td>
+            <td [class.pass]="reportCard()!.isPass" [class.fail]="!reportCard()!.isPass">
+              {{ reportCard()!.isPass ? 'Pass' : 'Fail' }}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <p class="percentage-line">Percentage: {{ reportCard()!.percentage }}%</p>
+    </div>
+  }
+</div>

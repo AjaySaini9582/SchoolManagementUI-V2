@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.shell-container {
+  height: calc(100% - 64px);
+}
+
+.shell-sidenav {
+  width: 240px;
+}
+
+.shell-content {
+  padding: 0;
+}

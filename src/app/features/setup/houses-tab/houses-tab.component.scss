@@ -1,0 +1,57 @@
+@use '../setup-tab-shared' as shared;
+
+.houses-tab {
+  @include shared.tab-layout;
+}
+
+.tab-header {
+  @include shared.tab-header;
+}
+
+.inline-form {
+  @include shared.inline-form;
+}
+
+.form-actions {
+  @include shared.form-actions;
+}
+
+.skeleton-rows {
+  @include shared.skeleton-rows;
+}
+
+.houses-table {
+  width: 100%;
+}
+
+.color-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.6);
+
+  input[type='color'] {
+    width: 56px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+}
+
+.color-swatch {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.status-chip {
+  @include shared.status-chip;
+}
+
+.actions-cell {
+  @include shared.actions-cell;
+}

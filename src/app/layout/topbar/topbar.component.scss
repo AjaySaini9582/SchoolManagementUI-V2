@@ -1,0 +1,53 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-title {
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.session-select {
+  width: 170px;
+  margin-right: 0.75rem;
+}
+
+.session-label {
+  margin-right: 1rem;
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 140px;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .app-title {
+    display: none;
+  }
+
+  .session-select {
+    width: 140px;
+    margin-right: 0.4rem;
+  }
+
+  .session-label {
+    margin-right: 0.5rem;
+  }
+}

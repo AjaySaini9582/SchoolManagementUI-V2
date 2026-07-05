@@ -1,0 +1,19 @@
+<div class="users-page">
+  <h1>Users</h1>
+
+  <app-data-table
+    [columns]="columns"
+    [fetchPage]="fetchUsers"
+    trackByKey="userId"
+    exportFilename="users"
+    emptyIcon="manage_accounts"
+    emptyTitle="No users found"
+    emptyDescription="Try adjusting your search."
+  >
+    <ng-template appDataTableCell="actions" let-row>
+      <button mat-icon-button title="Reset password" (click)="resetPassword(row); $event.stopPropagation()">
+        <mat-icon>lock_reset</mat-icon>
+      </button>
+    </ng-template>
+  </app-data-table>
+</div>

@@ -1,0 +1,57 @@
+<div class="document-verification-page">
+  <div class="page-header">
+    <h1>Document Verification</h1>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="type-filter">
+      <mat-label>Type</mat-label>
+      <mat-select [value]="filterType()" (selectionChange)="onFilterChange($event.value)">
+        <mat-option [value]="null">All</mat-option>
+        <mat-option [value]="DocumentOwnerType.Student">Student</mat-option>
+        <mat-option [value]="DocumentOwnerType.Employee">Employee</mat-option>
+        <mat-option [value]="DocumentOwnerType.School">School</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="3rem" />
+      <app-skeleton height="3rem" />
+      <app-skeleton height="3rem" />
+    </div>
+  } @else if (documents().length === 0) {
+    <app-empty-state icon="task_alt" title="Nothing pending" description="All documents have been reviewed." />
+  } @else {
+    <div class="documents-table">
+      <div class="documents-header">
+        <span>Type</span>
+        <span>Owner</span>
+        <span>Document</span>
+        <span>File</span>
+        <span>Actions</span>
+      </div>
+      @for (row of documents(); track row.id) {
+        <div class="documents-row">
+          <span>{{ ownerTypeName(row.documentType) }}</span>
+          <span>{{ row.ownerName }}</span>
+          <span>{{ row.documentName }}</span>
+          <span>
+            @if (documentUrl(row); as url) {
+              <a [href]="url" target="_blank" rel="noopener">{{ row.fileName }}</a>
+            } @else {
+              {{ row.fileName }}
+            }
+          </span>
+          <span class="row-actions">
+            <button mat-icon-button title="Approve" (click)="approve(row)">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button mat-icon-button title="Reject" (click)="reject(row)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

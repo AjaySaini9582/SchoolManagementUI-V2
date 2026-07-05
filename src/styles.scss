@@ -1,0 +1,72 @@
+// Order matters: Material theme first (base component styles + CSS custom
+// properties), then Bootstrap's grid, then Tailwind utilities last so its
+// utility classes can still win on specificity ties when needed.
+@use 'styles/material-theme';
+@use 'styles/bootstrap';
+@use 'styles/tailwind';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// mat-form-field's resting-state label is purely decorative — it has no
+// `for` attribute (mat-select/mat-input are associated via aria-labelledby,
+// not native label-for), so a real browser click landing on the label text
+// itself does NOT get forwarded to the control the way it would for a
+// native <input>/<select>. Whenever the label's rendered width happens to
+// reach past the midpoint of a narrower field (long label text, narrow
+// column), that area becomes an unresponsive click dead-zone. Force clicks
+// to always pass through to the actual control underneath.
+.mat-mdc-floating-label,
+.mdc-floating-label,
+.mdc-floating-label * {
+  pointer-events: none !important;
+}
+
+// ToastService panel classes — snackbars render in a global overlay outside
+// component view encapsulation, so this styling has to live here.
+.app-toast-success .mdc-snackbar__surface {
+  background-color: #2e7d32 !important;
+}
+
+.app-toast-error .mdc-snackbar__surface {
+  background-color: #c62828 !important;
+}
+
+.app-toast-info .mdc-snackbar__surface {
+  background-color: #333 !important;
+}
+
+.app-toast-success .mdc-snackbar__label,
+.app-toast-error .mdc-snackbar__label,
+.app-toast-info .mdc-snackbar__label {
+  color: #fff;
+}
+
+// Print: `.no-print` hides any element (shell chrome, in-page toolbars,
+// filters, buttons) that shouldn't appear on a printed page — the shell
+// already tags its topbar/sidenav with it, so whatever route is currently
+// active becomes the only printed content. Feature pages (receipts, report
+// cards) needing their own print-irrelevant UI (a "Print" button, page
+// tabs) should reuse this same class rather than inventing another one.
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  // Material's sidenav container fixes height/overflow for on-screen
+  // scrolling, which otherwise clips printed output to one screen's worth
+  // of content instead of the full page.
+  .mat-drawer-container,
+  .mat-drawer-content {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+}

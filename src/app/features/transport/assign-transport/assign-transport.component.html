@@ -1,0 +1,84 @@
+<div class="assign-transport">
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+    </div>
+  } @else {
+    <form [formGroup]="pickerForm" class="picker-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Class - Section</mat-label>
+        <mat-select formControlName="classSectionId">
+          @for (cls of classSections(); track cls.id) {
+            @for (section of cls.sections; track section.id) {
+              <mat-option [value]="section.id">{{ cls.name }} - {{ section.name }}</mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Student</mat-label>
+        <mat-select formControlName="studentId" [disabled]="roster().length === 0">
+          @for (student of roster(); track student.id) {
+            <mat-option [value]="student.id">{{ student.name }} @if (student.rollNumber) {
+              (Roll {{ student.rollNumber }})
+            }</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    @if (loadingRoster() || loadingStudent()) {
+      <div class="skeleton-rows">
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+      </div>
+    } @else if (!student()) {
+      <app-empty-state
+        icon="directions_bus"
+        title="Select a student"
+        description="Pick a class-section and student to view or assign bus transport."
+      />
+    } @else {
+      @if (currentStoppage(); as stoppage) {
+        <div class="current-assignment">
+          <mat-icon>directions_bus</mat-icon>
+          <div class="assignment-details">
+            <span class="assignment-route">{{ currentRouteName(stoppage) }} — {{ stoppage.name }}</span>
+            <span class="assignment-meta">
+              Pickup {{ stoppage.arrivalTime }} · Drop {{ stoppage.dispatchTime }} · ₹{{ stoppage.amount }}
+            </span>
+          </div>
+          <button mat-stroked-button color="warn" [disabled]="saving()" (click)="remove()">Remove Transport</button>
+        </div>
+      } @else {
+        <p class="no-assignment">No transport assigned for this student.</p>
+      }
+
+      <form [formGroup]="assignForm" (ngSubmit)="assign()" class="assign-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Bus Route</mat-label>
+          <mat-select formControlName="busRouteId">
+            @for (route of busRoutes(); track route.id) {
+              <mat-option [value]="route.id">{{ route.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Bus Stoppage</mat-label>
+          <mat-select formControlName="busStoppageId" [disabled]="stoppagesForSelectedRoute().length === 0">
+            @for (stoppage of stoppagesForSelectedRoute(); track stoppage.id) {
+              <mat-option [value]="stoppage.id">{{ stoppage.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+          {{ currentStoppage() ? 'Update Assignment' : 'Assign Transport' }}
+        </button>
+      </form>
+    }
+  }
+</div>

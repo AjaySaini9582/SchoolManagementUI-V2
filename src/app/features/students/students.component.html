@@ -1,0 +1,29 @@
+<div class="students-page">
+  <div class="page-header">
+    <h1>Students</h1>
+    <div class="page-header-actions">
+      <button mat-stroked-button (click)="openBulkImport()">
+        <mat-icon>upload_file</mat-icon>
+        Bulk Import
+      </button>
+      <button mat-stroked-button (click)="openPromote()">
+        <mat-icon>trending_up</mat-icon>
+        Promote Students
+      </button>
+      <button mat-flat-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon>
+        Add Student
+      </button>
+    </div>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [fetchPage]="fetchStudents"
+    (rowClick)="openEdit($event)"
+    exportFilename="students"
+    emptyIcon="school"
+    emptyTitle="No students found"
+    emptyDescription="Add your first student to get started."
+  />
+</div>

@@ -1,0 +1,71 @@
+.bulk-import-page {
+  padding: 1.5rem;
+  max-width: 1000px;
+
+  h1 {
+    margin: 0 0 0.5rem;
+  }
+}
+
+.intro {
+  margin: 0 0 1rem;
+  opacity: 0.75;
+  font-size: 0.875rem;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.preview-table {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+
+  &.valid {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.invalid {
+    background: #ffebee;
+    color: #c62828;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+  }
+}
+
+.import-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.result-card {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+
+  ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+  }
+}

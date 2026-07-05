@@ -1,0 +1,33 @@
+@use '../setup-tab-shared' as shared;
+
+.bus-stoppages-tab {
+  @include shared.tab-layout;
+}
+
+.tab-header {
+  @include shared.tab-header;
+}
+
+.inline-form {
+  @include shared.inline-form;
+}
+
+.form-actions {
+  @include shared.form-actions;
+}
+
+.skeleton-rows {
+  @include shared.skeleton-rows;
+}
+
+.stoppages-table {
+  width: 100%;
+}
+
+.status-chip {
+  @include shared.status-chip;
+}
+
+.actions-cell {
+  @include shared.actions-cell;
+}

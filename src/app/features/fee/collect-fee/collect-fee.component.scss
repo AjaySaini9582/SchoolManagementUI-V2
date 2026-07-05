@@ -1,0 +1,118 @@
+.collect-fee {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.5rem;
+
+  h3 {
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
+  }
+}
+
+.picker-row,
+.collect-form {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.collect-form {
+  align-items: flex-start;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+
+  mat-form-field {
+    min-width: 200px;
+  }
+}
+
+.full-width {
+  flex-basis: 100%;
+}
+
+.form-actions {
+  display: flex;
+  align-self: center;
+}
+
+.skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.due-summary {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.due-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  min-width: 140px;
+}
+
+.due-label {
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.due-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.due-cell-negative .due-value {
+  color: #c62828;
+}
+
+.no-receipts {
+  opacity: 0.65;
+  font-size: 0.9rem;
+}
+
+.receipts-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.receipts-header,
+.receipts-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.receipts-header {
+  font-weight: 500;
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.receipts-row {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 0.9rem;
+
+  &.cancelled {
+    opacity: 0.55;
+    text-decoration: line-through;
+  }
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.25rem;
+  text-decoration: none;
+}

@@ -1,0 +1,72 @@
+<div class="houses-tab">
+  <div class="tab-header">
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Add House
+    </button>
+  </div>
+
+  @if (showForm()) {
+    <form [formGroup]="form" (ngSubmit)="save()" class="inline-form">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.name" />
+
+      <label class="color-field">
+        Color
+        <input type="color" formControlName="color" />
+      </label>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">Save</button>
+      </div>
+    </form>
+  }
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1]; track i) {
+        <app-skeleton height="2.5rem" />
+      }
+    </div>
+  } @else if (houses().length === 0) {
+    <app-empty-state icon="home" title="No houses yet" description="Add one to get started." />
+  } @else {
+    <table mat-table [dataSource]="houses()" class="houses-table">
+      <ng-container matColumnDef="color">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let house">
+          <span class="color-swatch" [style.background-color]="house.color"></span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let house">{{ house.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let house">
+          <span class="status-chip" [class.active]="house.isActive">{{ house.isActive ? 'Active' : 'Inactive' }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let house" class="actions-cell">
+          <button mat-icon-button title="Edit" (click)="openEdit(house)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          @if (house.isActive) {
+            <button mat-icon-button title="Deactivate" (click)="confirmDeactivate(house)">
+              <mat-icon>block</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  }
+</div>

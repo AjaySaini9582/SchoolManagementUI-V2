@@ -1,0 +1,84 @@
+<div class="mark-attendance">
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="picker-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Class - Section</mat-label>
+        <mat-select formControlName="classSectionId">
+          @for (cls of classSections(); track cls.id) {
+            @for (section of cls.sections; track section.id) {
+              <mat-option [value]="section.id">{{ cls.name }} - {{ section.name }}</mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Date</mat-label>
+        <input matInput type="date" formControlName="date" />
+      </mat-form-field>
+    </form>
+
+    @if (loadingRoster()) {
+      <div class="skeleton-rows">
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+      </div>
+    } @else if (rows().length === 0) {
+      <app-empty-state
+        icon="fact_check"
+        title="No students to mark"
+        description="Pick a class-section and date to load the roster."
+      />
+    } @else {
+      @if (alreadyMarked()) {
+        <p class="already-marked-note">Attendance is already marked for this date — saving again will update it.</p>
+      }
+
+      <div class="quick-actions">
+        <button mat-stroked-button type="button" (click)="markAll(statusIdFor('Present'))">Mark All Present</button>
+        <button mat-stroked-button type="button" (click)="markAll(statusIdFor('Absent'))">Mark All Absent</button>
+      </div>
+
+      <div class="roster-table">
+        <div class="roster-header">
+          <span class="col-name">Student</span>
+          <span class="col-roll">Roll No.</span>
+          <span class="col-status">Status</span>
+          <span class="col-remark">Remark</span>
+        </div>
+        @for (row of rows(); track row.studentId) {
+          <div class="roster-row">
+            <span class="col-name">{{ row.studentName }}</span>
+            <span class="col-roll">{{ row.rollNumber ?? '—' }}</span>
+            <mat-form-field appearance="outline" class="col-status">
+              <mat-select [value]="row.statusId" (selectionChange)="updateStatus(row.studentId, $event.value)">
+                @for (status of statuses(); track status.id) {
+                  <mat-option [value]="status.id">{{ status.text }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col-remark">
+              <input matInput [value]="row.remark" (input)="updateRemark(row.studentId, $any($event.target).value)" />
+            </mat-form-field>
+          </div>
+        }
+      </div>
+
+      <div class="form-footer">
+        <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+          @if (saving()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            Save Attendance
+          }
+        </button>
+      </div>
+    }
+  }
+</div>

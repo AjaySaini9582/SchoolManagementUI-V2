@@ -1,0 +1,493 @@
+<div class="student-form-page">
+  <div class="title-row">
+    <h1>{{ isEdit ? 'Edit Student' : 'Add Student' }}</h1>
+    @if (attendanceSummary(); as summary) {
+      <span class="attendance-badge" title="Attendance for the active session">
+        Attendance: {{ summary.attendancePercentage }}%
+      </span>
+    }
+  </div>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <mat-stepper orientation="horizontal" [linear]="false">
+        <!-- Step 1: Personal -->
+        <mat-step label="Personal">
+          <div class="field-grid">
+            <div class="field-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="name" />
+              </mat-form-field>
+              <app-field-error [control]="form.controls.name" />
+            </div>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Father's Name</mat-label>
+              <input matInput formControlName="fatherName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Mother's Name</mat-label>
+              <input matInput formControlName="motherName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Contact Number</mat-label>
+              <input matInput formControlName="contactNumber" />
+            </mat-form-field>
+
+            <div class="field-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput type="date" formControlName="dob" />
+              </mat-form-field>
+              <app-field-error [control]="form.controls.dob" />
+            </div>
+
+            <div class="field-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="genderId">
+                  @for (option of genders(); track option.id) {
+                    <mat-option [value]="option.id">{{ option.text }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <app-field-error [control]="form.controls.genderId" />
+            </div>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Medium</mat-label>
+              <mat-select formControlName="mediumId">
+                @for (option of mediums(); track option.id) {
+                  <mat-option [value]="option.id">{{ option.text }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Admission Number</mat-label>
+              <input matInput formControlName="admissionNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Admission Date</mat-label>
+              <input matInput type="date" formControlName="admissionDate" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Roll Number</mat-label>
+              <input matInput type="number" formControlName="rollNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>SRN Number</mat-label>
+              <input matInput formControlName="srnNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Ledger Number</mat-label>
+              <input matInput formControlName="ledgerNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Family Id</mat-label>
+              <input matInput formControlName="familyId" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>AAPR Id</mat-label>
+              <input matInput formControlName="aaprId" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Permanent Education Number</mat-label>
+              <input matInput formControlName="permananetEducationNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Enrollment School Name</mat-label>
+              <input matInput formControlName="enrollmentSchoolName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Opening Balance</mat-label>
+              <input matInput formControlName="openingBalance" />
+            </mat-form-field>
+          </div>
+
+          <div class="field-grid" formGroupName="studentClassSection">
+            <div class="field-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Class - Section</mat-label>
+                <mat-select formControlName="classSectionId">
+                  @for (cls of classSections(); track cls.id) {
+                    @for (section of cls.sections; track section.id) {
+                      <mat-option [value]="section.id">{{ cls.name }} - {{ section.name }}</mat-option>
+                    }
+                  }
+                </mat-select>
+              </mat-form-field>
+              <app-field-error [control]="form.controls.studentClassSection.controls.classSectionId" />
+            </div>
+
+            <div class="field-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Session</mat-label>
+                <mat-select formControlName="sessionYearId">
+                  @for (session of sessions(); track session.id) {
+                    <mat-option [value]="session.id">{{ session.start }} - {{ session.end }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <app-field-error [control]="form.controls.studentClassSection.controls.sessionYearId" />
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button mat-flat-button color="primary" matStepperNext type="button">Next</button>
+          </div>
+        </mat-step>
+
+        <!-- Step 2: Admission Detail -->
+        <mat-step label="Admission Detail">
+          <div class="field-grid" formGroupName="studentAdmissionDetail">
+            <mat-form-field appearance="outline">
+              <mat-label>Admission Scheme</mat-label>
+              <mat-select formControlName="schemeId">
+                @for (option of admissionSchemes(); track option.id) {
+                  <mat-option [value]="option.id">{{ option.text }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Admission Type</mat-label>
+              <mat-select formControlName="admissionTypeId">
+                @for (option of admissionTypes(); track option.id) {
+                  <mat-option [value]="option.id">{{ option.text }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Guardian Name</mat-label>
+              <input matInput formControlName="guardianName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Relation</mat-label>
+              <input matInput formControlName="relation" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Religion</mat-label>
+              <mat-select formControlName="religionId">
+                @for (option of religions(); track option.id) {
+                  <mat-option [value]="option.id">{{ option.text }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Caste Category</mat-label>
+              <mat-select formControlName="casteCategoryId">
+                @for (option of casteCategories(); track option.id) {
+                  <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Blood Group</mat-label>
+              <mat-select formControlName="bloodGroupId">
+                @for (option of bloodGroups(); track option.id) {
+                  <mat-option [value]="option.id">{{ option.text }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Birth Place</mat-label>
+              <input matInput formControlName="birthPlace" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Height (cm)</mat-label>
+              <input matInput formControlName="height_In_CM" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Weight (kg)</mat-label>
+              <input matInput formControlName="weight_In_KG" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Color Vision</mat-label>
+              <input matInput formControlName="colorVision" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>House</mat-label>
+              <mat-select formControlName="houseId">
+                @for (house of houses(); track house.id) {
+                  <mat-option [value]="house.id">{{ house.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Previous School Name</mat-label>
+              <input matInput formControlName="previousSchoolName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Transfer Certificate No.</mat-label>
+              <input matInput formControlName="tC_No" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Transfer Certificate Date</mat-label>
+              <input matInput type="date" formControlName="tC_Date" />
+            </mat-form-field>
+
+            <mat-checkbox
+              [checked]="form.controls.studentAdmissionDetail.controls.isCaptainId.value === 1"
+              (change)="form.controls.studentAdmissionDetail.controls.isCaptainId.setValue($event.checked ? 1 : 0)"
+            >
+              House Captain
+            </mat-checkbox>
+          </div>
+
+          <p class="transport-note">
+            <mat-icon inline>info</mat-icon>
+            Bus transport assignment is managed from the Transport section, not here.
+          </p>
+
+          <div class="step-actions">
+            <button mat-button matStepperPrevious type="button">Back</button>
+            <button mat-flat-button color="primary" matStepperNext type="button">Next</button>
+          </div>
+        </mat-step>
+
+        <!-- Step 3: Address -->
+        <mat-step label="Address">
+          <div class="field-grid" formGroupName="studentAddress">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Present Address</mat-label>
+              <textarea matInput rows="3" formControlName="presentAddress"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Permanent Address</mat-label>
+              <textarea matInput rows="3" formControlName="permanentAddress"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="step-actions">
+            <button mat-button matStepperPrevious type="button">Back</button>
+            <button mat-flat-button color="primary" matStepperNext type="button">Next</button>
+          </div>
+        </mat-step>
+
+        <!-- Step 4: Family -->
+        <mat-step label="Family">
+          <div class="field-grid" formGroupName="studentFamilyDetail">
+            <mat-form-field appearance="outline">
+              <mat-label>Student Email</mat-label>
+              <input matInput formControlName="studentEmail" />
+            </mat-form-field>
+            <app-field-error [control]="form.controls.studentFamilyDetail.controls.studentEmail" />
+
+            <mat-form-field appearance="outline">
+              <mat-label>Father's Contact</mat-label>
+              <input matInput formControlName="fatherContactNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Father's Email</mat-label>
+              <input matInput formControlName="fatherEmail" />
+            </mat-form-field>
+            <app-field-error [control]="form.controls.studentFamilyDetail.controls.fatherEmail" />
+
+            <mat-form-field appearance="outline">
+              <mat-label>Father's Occupation</mat-label>
+              <input matInput formControlName="fatherOccupation" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Father's Qualification</mat-label>
+              <input matInput formControlName="fatherQualification" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Mother's Mobile</mat-label>
+              <input matInput formControlName="motherMobileNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Mother's Email</mat-label>
+              <input matInput formControlName="motherEmail" />
+            </mat-form-field>
+            <app-field-error [control]="form.controls.studentFamilyDetail.controls.motherEmail" />
+
+            <mat-form-field appearance="outline">
+              <mat-label>Mother's Occupation</mat-label>
+              <input matInput formControlName="motherOccupation" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Mother's Qualification</mat-label>
+              <input matInput formControlName="motherQualification" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Parent Mobile</mat-label>
+              <input matInput formControlName="parentMobileNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Parent Email</mat-label>
+              <input matInput formControlName="parentEmail" />
+            </mat-form-field>
+            <app-field-error [control]="form.controls.studentFamilyDetail.controls.parentEmail" />
+
+            <mat-form-field appearance="outline">
+              <mat-label>Parent Occupation</mat-label>
+              <input matInput formControlName="parentOccupation" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Parent Qualification</mat-label>
+              <input matInput formControlName="parentQualification" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>SMS Mobile Number</mat-label>
+              <input matInput formControlName="sMSMobileNumber" />
+            </mat-form-field>
+
+            <mat-checkbox formControlName="isSMSFacility">SMS Facility Enabled</mat-checkbox>
+          </div>
+
+          <h3>Bank &amp; Identity</h3>
+          <div class="field-grid" formGroupName="studentDocumentDetail">
+            <mat-form-field appearance="outline">
+              <mat-label>Student Aadhar Number</mat-label>
+              <input matInput formControlName="studentAdharNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Student Bank</mat-label>
+              <mat-select formControlName="studentBankId">
+                @for (bank of banks(); track bank.id) {
+                  <mat-option [value]="bank.id">{{ bank.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Student Bank Account Number</mat-label>
+              <input matInput formControlName="studentBankAccountNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Student Bank IFSC</mat-label>
+              <input matInput formControlName="studentIFSCCode" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Father's Aadhar Number</mat-label>
+              <input matInput formControlName="fatherAdharNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Mother's Aadhar Number</mat-label>
+              <input matInput formControlName="motherAdharNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Parent Bank</mat-label>
+              <mat-select formControlName="parentBankId">
+                @for (bank of banks(); track bank.id) {
+                  <mat-option [value]="bank.id">{{ bank.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Parent Account Number</mat-label>
+              <input matInput formControlName="parentAccountNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Parent Bank IFSC</mat-label>
+              <input matInput formControlName="parentBankIFSCCode" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Registration Number</mat-label>
+              <input matInput formControlName="registrationNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Annual Income</mat-label>
+              <input matInput type="number" formControlName="annualIncome" />
+            </mat-form-field>
+          </div>
+
+          <div class="step-actions">
+            <button mat-button matStepperPrevious type="button">Back</button>
+            <button mat-flat-button color="primary" matStepperNext type="button">Next</button>
+          </div>
+        </mat-step>
+
+        <!-- Step 5: Documents -->
+        <mat-step label="Documents">
+          @if (documentRows().length === 0) {
+            <p>No document types are configured.</p>
+          } @else {
+            <div class="documents-grid">
+              @for (row of documentRows(); track row.documentMasterId) {
+                <div class="document-row">
+                  <div class="document-header">
+                    <span class="document-name">{{ row.documentName }}</span>
+                    @if (row.status) {
+                      <span class="status-chip" [class]="row.status.verificationStatusName?.toLowerCase()">
+                        {{ row.status.verificationStatusName }}
+                      </span>
+                    }
+                  </div>
+                  <app-file-upload
+                    [(ngModel)]="row.file"
+                    [ngModelOptions]="{ standalone: true }"
+                    [existingFileUrl]="documentUrl(row)"
+                    [existingFileName]="row.status?.fileName ?? null"
+                  />
+                </div>
+              }
+            </div>
+          }
+
+          <div class="step-actions">
+            <button mat-button matStepperPrevious type="button">Back</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+
+      <div class="form-footer">
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+          @if (saving()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            Save Student
+          }
+        </button>
+      </div>
+    </form>
+  }
+</div>

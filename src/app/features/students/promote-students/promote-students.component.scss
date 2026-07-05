@@ -1,0 +1,76 @@
+.promote-students-page {
+  padding: 1.5rem;
+  max-width: 900px;
+
+  h1 {
+    margin: 0 0 1rem;
+  }
+}
+
+.promote-form {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.session-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 260px;
+
+  h3 {
+    margin: 0 0 0.25rem;
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+
+  // mat-form-field defaults to inline-block; stretch it to the column's
+  // full width for consistent field sizing (see styles.scss for the actual
+  // floating-label click-dead-zone fix).
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.roster {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.roster-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-left: 0.5rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.roll-number {
+  opacity: 0.6;
+  font-size: 0.8rem;
+}
+
+.result-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #e8f5e9;
+  color: #2e7d32;
+
+  p {
+    margin: 0.15rem 0;
+  }
+}

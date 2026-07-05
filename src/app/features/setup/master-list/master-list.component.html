@@ -1,0 +1,49 @@
+<div class="master-list">
+  <div class="master-list-header">
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Add {{ label }}
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1, 2]; track i) {
+        <app-skeleton height="2.5rem" />
+      }
+    </div>
+  } @else if (items.length === 0) {
+    <app-empty-state icon="list" [title]="'No ' + label + 's yet'" [description]="'Add one to get started.'" />
+  } @else {
+    <table mat-table [dataSource]="items" class="master-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let item">
+          <span class="status-chip" [class.active]="item.isActive">{{ item.isActive ? 'Active' : 'Inactive' }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let item" class="actions-cell">
+          <button mat-icon-button title="Edit" (click)="openEdit(item)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          @if (item.isActive) {
+            <button mat-icon-button title="Deactivate" (click)="confirmDeactivate(item)">
+              <mat-icon>block</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  }
+</div>

@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Add' }} {{ data.label }}</h2>
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+  <app-field-error [control]="form.controls.name" />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

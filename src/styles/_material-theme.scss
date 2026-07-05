@@ -1,0 +1,22 @@
+// Angular Material theme, built with the M3 `mat.define-theme` API instead of
+// a stock prebuilt theme (indigo-pink, deeppurple-amber, ...). Swap the
+// `primary`/`tertiary` palettes below for a hex-seeded custom palette from
+// https://material.angular.io/theming when full brand colors are ready.
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$school-management-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$violet-palette,
+    tertiary: mat.$rose-palette,
+  ),
+  density: (
+    scale: 0,
+  ),
+));
+
+:root {
+  @include mat.all-component-themes($school-management-theme);
+}

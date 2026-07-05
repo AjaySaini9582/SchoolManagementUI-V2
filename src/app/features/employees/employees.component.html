@@ -1,0 +1,21 @@
+<div class="employees-page">
+  <div class="page-header">
+    <h1>Employees</h1>
+    <div class="page-header-actions">
+      <button mat-flat-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon>
+        Add Employee
+      </button>
+    </div>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [fetchPage]="fetchEmployees"
+    (rowClick)="openEdit($event)"
+    exportFilename="employees"
+    emptyIcon="badge"
+    emptyTitle="No employees found"
+    emptyDescription="Add your first employee to get started."
+  />
+</div>

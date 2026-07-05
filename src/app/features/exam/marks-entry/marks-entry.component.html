@@ -1,0 +1,94 @@
+<div class="marks-entry">
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="picker-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Class - Section</mat-label>
+        <mat-select formControlName="classSectionId">
+          @for (cls of classSections(); track cls.id) {
+            @for (section of cls.sections; track section.id) {
+              <mat-option [value]="section.id">{{ cls.name }} - {{ section.name }}</mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Exam Type</mat-label>
+        <mat-select formControlName="examTypeId">
+          @for (type of examTypes(); track type.id) {
+            <mat-option [value]="type.id">{{ type.type }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Subject</mat-label>
+        <mat-select formControlName="subjectId" [disabled]="subjectsForSelectedClass().length === 0">
+          @for (subject of subjectsForSelectedClass(); track subject.id) {
+            <mat-option [value]="subject.id">{{ subject.subjectName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Max Marks</mat-label>
+        <input matInput type="number" formControlName="maxMarks" />
+      </mat-form-field>
+    </form>
+
+    @if (loadingRows()) {
+      <div class="skeleton-rows">
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+      </div>
+    } @else if (rows().length === 0) {
+      <app-empty-state
+        icon="edit_note"
+        title="No students to mark"
+        description="Pick a class-section, exam type, and subject to load the roster."
+      />
+    } @else {
+      <div class="marks-table">
+        <div class="marks-header">
+          <span class="col-name">Student</span>
+          <span class="col-roll">Roll No.</span>
+          <span class="col-marks">Marks Obtained</span>
+          <span class="col-remark">Remark</span>
+        </div>
+        @for (row of rows(); track row.studentId) {
+          <div class="marks-row">
+            <span class="col-name">{{ row.studentName }}</span>
+            <span class="col-roll">{{ row.rollNumber ?? '—' }}</span>
+            <mat-form-field appearance="outline" class="col-marks">
+              <input
+                matInput
+                type="number"
+                [value]="row.marksObtained"
+                (input)="updateMarks(row.studentId, $any($event.target).value === '' ? null : +$any($event.target).value)"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col-remark">
+              <input matInput [value]="row.remark" (input)="updateRemark(row.studentId, $any($event.target).value)" />
+            </mat-form-field>
+          </div>
+        }
+      </div>
+
+      <div class="form-footer">
+        <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+          @if (saving()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            Save Marks
+          }
+        </button>
+      </div>
+    }
+  }
+</div>

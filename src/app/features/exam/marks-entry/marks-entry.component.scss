@@ -1,0 +1,55 @@
+.marks-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.picker-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.marks-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.marks-header,
+.marks-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.3fr 2fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+}
+
+.marks-header {
+  font-weight: 500;
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.marks-row {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.col-marks,
+.col-remark {
+  margin-bottom: -1.25em;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+}

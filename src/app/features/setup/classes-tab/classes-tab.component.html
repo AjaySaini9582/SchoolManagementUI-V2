@@ -1,0 +1,46 @@
+<div class="classes-tab">
+  <div class="tab-header">
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Add Class
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1, 2]; track i) {
+        <app-skeleton height="3rem" />
+      }
+    </div>
+  } @else if (classes().length === 0) {
+    <app-empty-state icon="school" title="No classes yet" description="Add one to get started." />
+  } @else {
+    <mat-accordion>
+      @for (cls of classes(); track cls.id) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ cls.name }}</mat-panel-title>
+            <mat-panel-description>{{ cls.sections.length }} section(s)</mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-chip-set>
+            @for (section of cls.sections; track section.id) {
+              <mat-chip>{{ section.name }}</mat-chip>
+            }
+          </mat-chip-set>
+
+          <div class="panel-actions">
+            <button mat-button (click)="addSection(cls)">
+              <mat-icon>add</mat-icon>
+              Add Section
+            </button>
+            <button mat-button (click)="openEdit(cls)">
+              <mat-icon>edit</mat-icon>
+              Rename Class
+            </button>
+          </div>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  }
+</div>

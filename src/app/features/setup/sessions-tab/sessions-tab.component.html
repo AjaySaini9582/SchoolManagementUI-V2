@@ -1,0 +1,52 @@
+<div class="sessions-tab">
+  <form [formGroup]="form" (ngSubmit)="createSession()" class="create-form">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Start Year</mat-label>
+      <input matInput type="number" formControlName="start" placeholder="e.g. 2026" />
+    </mat-form-field>
+    <app-field-error [control]="form.controls.start" [messages]="{ min: 'Enter a valid year.' }" />
+    <button mat-flat-button color="primary" type="submit" [disabled]="creating()">
+      <mat-icon>add</mat-icon>
+      Create Session
+    </button>
+  </form>
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1]; track i) {
+        <app-skeleton height="2.5rem" />
+      }
+    </div>
+  } @else if (sessions().length === 0) {
+    <app-empty-state icon="event" title="No sessions yet" description="Create the first school-year session above." />
+  } @else {
+    <table mat-table [dataSource]="sessions()" class="sessions-table">
+      <ng-container matColumnDef="session">
+        <th mat-header-cell *matHeaderCellDef>Session</th>
+        <td mat-cell *matCellDef="let session">{{ session.start }} - {{ session.end }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let session">
+          <span class="status-chip" [class.active]="session.isActive">{{ session.isActive ? 'Active' : 'Inactive' }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let session" class="actions-cell">
+          @if (!session.isActive) {
+            <button mat-button (click)="setActive(session)">Set Active</button>
+            <button mat-icon-button title="Deactivate" (click)="confirmDeactivate(session)">
+              <mat-icon>block</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  }
+</div>

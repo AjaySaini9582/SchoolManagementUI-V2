@@ -1,0 +1,68 @@
+<div class="activity-log-page">
+  <div class="page-header">
+    <h1>Activity Log</h1>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="run()" class="filter-row">
+    <mat-form-field appearance="outline">
+      <mat-label>From</mat-label>
+      <input matInput type="date" formControlName="fromDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>To</mat-label>
+      <input matInput type="date" formControlName="toDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <mat-select [value]="entityTypeFilter()" (selectionChange)="onEntityTypeChange($event.value)">
+        <mat-option [value]="null">All</mat-option>
+        @for (type of entityTypes; track type) {
+          <mat-option [value]="type">{{ type }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="loading()">Run</button>
+  </form>
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+    </div>
+  } @else if (filteredEntries().length === 0) {
+    <app-empty-state icon="history" title="No activity found" description="Try a wider date range or a different type." />
+  } @else {
+    <div class="log-table">
+      <div class="log-header">
+        <span>When</span>
+        <span>Type</span>
+        <span>Action</span>
+        <span>Description</span>
+        <span>By</span>
+      </div>
+      @for (entry of pagedEntries(); track entry.entityType + entry.entityId + entry.action + entry.timestamp) {
+        <div class="log-row">
+          <span>{{ entry.timestamp }}</span>
+          <span class="type-chip">{{ entry.entityType }}</span>
+          <span class="action-chip" [class.created]="entry.action === 'Created'" [class.modified]="entry.action === 'Modified'">
+            {{ entry.action }}
+          </span>
+          <span>{{ entry.description }}</span>
+          <span>{{ entry.userName ?? (entry.userId ? 'User #' + entry.userId : 'System') }}</span>
+        </div>
+      }
+    </div>
+
+    <mat-paginator
+      [length]="filteredEntries().length"
+      [pageSize]="20"
+      [pageIndex]="pageIndex()"
+      [hidePageSize]="true"
+      (page)="onPage($event)"
+    />
+  }
+</div>

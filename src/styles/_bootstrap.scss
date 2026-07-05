@@ -1,0 +1,4 @@
+// Bootstrap's grid entry point only: containers, the 12-col grid, and a
+// curated flexbox/spacing utility subset. No reboot (Material owns base
+// element styles) and no bootstrap.bundle.js/Popper — layout only.
+@use 'bootstrap/scss/bootstrap-grid';

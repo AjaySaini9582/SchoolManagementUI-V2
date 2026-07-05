@@ -1,0 +1,69 @@
+<div class="fee-receipt-page">
+  <div class="no-print toolbar">
+    <button mat-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Fee
+    </button>
+    @if (receipt()) {
+      <button mat-flat-button color="primary" (click)="print()">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else if (!receipt()) {
+    <app-empty-state icon="receipt_long" title="Receipt not found" description="This receipt could not be located." />
+  } @else {
+    <div class="receipt">
+      <h1>Fee Receipt</h1>
+      @if (receipt()!.isCancelled) {
+        <p class="cancelled-banner">This receipt has been cancelled.</p>
+      }
+
+      <div class="receipt-row">
+        <span class="receipt-label">Receipt No.</span>
+        <span class="receipt-value">{{ receipt()!.receiptNumber }}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Date</span>
+        <span class="receipt-value">{{ receipt()!.paymentDate }}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Student</span>
+        <span class="receipt-value">{{ receipt()!.studentName }}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Pay Mode</span>
+        <span class="receipt-value">{{ receipt()!.paymodeType }}</span>
+      </div>
+
+      <table class="amount-table">
+        <tbody>
+          <tr>
+            <td>Amount</td>
+            <td>₹{{ receipt()!.amount }}</td>
+          </tr>
+          <tr>
+            <td>Fine</td>
+            <td>₹{{ receipt()!.fineAmount }}</td>
+          </tr>
+          <tr>
+            <td>Discount</td>
+            <td>-₹{{ receipt()!.discountAmount }}</td>
+          </tr>
+          <tr class="total-row">
+            <td>Total</td>
+            <td>₹{{ receipt()!.amount + receipt()!.fineAmount - receipt()!.discountAmount }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      @if (receipt()!.remark) {
+        <p class="remark">Remark: {{ receipt()!.remark }}</p>
+      }
+    </div>
+  }
+</div>

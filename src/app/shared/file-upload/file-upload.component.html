@@ -1,0 +1,40 @@
+@if (!file() && existingFileUrl && existingFileName) {
+  <div class="existing-file">
+    <mat-icon>description</mat-icon>
+    <a [href]="existingFileUrl" target="_blank" rel="noopener" class="file-name">{{ existingFileName }}</a>
+    <span class="existing-hint">Click below to replace</span>
+  </div>
+}
+
+<div
+  class="dropzone"
+  [class.drag-over]="dragOver()"
+  [class.disabled]="disabled()"
+  (click)="triggerBrowse()"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave()"
+  (drop)="onDrop($event)"
+>
+  <input #fileInput type="file" [accept]="accept" class="hidden-input" (change)="onInputChange($event)" />
+
+  @if (file(); as selected) {
+    <div class="preview">
+      @if (isImage && previewUrl(); as src) {
+        <img [src]="src" [alt]="selected.name" class="preview-image" />
+      } @else {
+        <mat-icon class="preview-icon">description</mat-icon>
+      }
+      <span class="file-name">{{ selected.name }}</span>
+      <button type="button" class="remove-btn" (click)="remove($event)" aria-label="Remove file">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  } @else {
+    <mat-icon>cloud_upload</mat-icon>
+    <p>{{ label }}</p>
+  }
+</div>
+
+@if (errorMessage(); as error) {
+  <p class="error-text">{{ error }}</p>
+}

@@ -1,0 +1,58 @@
+<div class="transport-roster">
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="picker-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Bus Route</mat-label>
+        <mat-select formControlName="busRouteId">
+          @for (route of busRoutes(); track route.id) {
+            <mat-option [value]="route.id">{{ route.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Bus Stoppage</mat-label>
+        <mat-select formControlName="busStoppageId" [disabled]="stoppagesForSelectedRoute().length === 0">
+          @for (stoppage of stoppagesForSelectedRoute(); track stoppage.id) {
+            <mat-option [value]="stoppage.id">{{ stoppage.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    @if (loadingRoster()) {
+      <div class="skeleton-rows">
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+      </div>
+    } @else if (roster().length === 0) {
+      <app-empty-state
+        icon="directions_bus"
+        title="No students to show"
+        description="Pick a bus route and stoppage to see who's assigned there."
+      />
+    } @else {
+      <div class="roster-table">
+        <div class="roster-header">
+          <span>Student</span>
+          <span>Class</span>
+          <span>Section</span>
+          <span>Contact</span>
+        </div>
+        @for (row of roster(); track row.studentId) {
+          <div class="roster-row">
+            <span>{{ row.studentName }}</span>
+            <span>{{ row.className }}</span>
+            <span>{{ row.sectionName }}</span>
+            <span>{{ row.contactNumber }}</span>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

@@ -1,0 +1,52 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>School Management</mat-card-title>
+      <mat-card-subtitle>Sign in to continue</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="userName" autocomplete="username" />
+          </mat-form-field>
+          <app-field-error [control]="form.controls.userName" />
+        </div>
+
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" autocomplete="current-password" />
+          </mat-form-field>
+          <app-field-error [control]="form.controls.password" />
+        </div>
+
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="roleId">
+              @for (role of roleOptions; track role.roleId) {
+                <mat-option [value]="role.roleId">{{ role.roleName }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <app-field-error [control]="form.controls.roleId" [messages]="{ required: 'Select a role.' }" />
+        </div>
+
+        @if (errorMessage()) {
+          <p class="login-error">{{ errorMessage() }}</p>
+        }
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="submitting()" class="login-submit">
+          @if (submitting()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            Sign in
+          }
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

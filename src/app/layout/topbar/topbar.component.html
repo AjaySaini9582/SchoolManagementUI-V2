@@ -1,0 +1,39 @@
+<mat-toolbar color="primary" class="topbar">
+  <button mat-icon-button (click)="menuToggle.emit()" aria-label="Toggle navigation">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <span class="app-title">School Management</span>
+
+  <span class="spacer"></span>
+
+  @if (isAdmin() && sessionOptions().length > 0) {
+    <mat-form-field appearance="outline" class="session-select" subscriptSizing="dynamic">
+      <mat-label>Session</mat-label>
+      <mat-select [value]="activeSession()?.id" panelWidth="auto" (selectionChange)="onSessionChange($event.value)">
+        @for (session of sessionOptions(); track session.id) {
+          <mat-option [value]="session.id">{{ session.start }} - {{ session.end }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  } @else {
+    @if (activeSession(); as session) {
+      <span class="session-label">{{ session.start }} - {{ session.end }}</span>
+    }
+  }
+
+  <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
+    <mat-icon>account_circle</mat-icon>
+    <span>{{ currentUser()?.userName }}</span>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item (click)="changePassword()">
+      <mat-icon>lock_reset</mat-icon>
+      <span>Reset Password</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

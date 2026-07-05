@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx --yes playwright --version)",
+      "Bash(grep -rn pointer-events 'c:\\\\Users\\\\AjaySaini\\\\Desktop\\\\angualr\\\\SchoolManagementUI\\\\node_modules\\\\@angular\\\\material\\\\core\\\\_core.scss' 'c:\\\\Users\\\\AjaySaini\\\\Desktop\\\\angualr\\\\SchoolManagementUI\\\\node_modules\\\\@angular\\\\material\\\\core\" 2>&1 | grep -i label|floating | head -10 *)",
+      "Bash(node \"C:\\\\Users\\\\AJAYSA~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-AjaySaini-Desktop-angualr-SchoolManagementUI\\\\45940fa6-9d53-4a02-8e93-28d61ebb555b\\\\scratchpad\\\\diag.js\")"
+    ]
+  }
+}

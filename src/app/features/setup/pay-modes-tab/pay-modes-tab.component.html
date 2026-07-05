@@ -1,0 +1,80 @@
+<div class="pay-modes-tab">
+  <div class="tab-header">
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Add Pay Mode
+    </button>
+  </div>
+
+  @if (showForm()) {
+    <form [formGroup]="form" (ngSubmit)="save()" class="inline-form">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="categoryId">
+          @for (category of categories(); track category.id) {
+            <mat-option [value]="category.id">{{ category.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <app-field-error [control]="form.controls.categoryId" />
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Type</mat-label>
+        <input matInput formControlName="type" placeholder="e.g. Cash, Cheque, UPI" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.type" />
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Opening Balance</mat-label>
+        <input matInput type="number" formControlName="openingBalance" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.openingBalance" />
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">Save</button>
+      </div>
+    </form>
+  }
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1]; track i) {
+        <app-skeleton height="2.5rem" />
+      }
+    </div>
+  } @else if (payModes().length === 0) {
+    <app-empty-state icon="payments" title="No pay modes yet" description="Add one to get started." />
+  } @else {
+    <table mat-table [dataSource]="payModes()" class="pay-modes-table">
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Category</th>
+        <td mat-cell *matCellDef="let mode">{{ categoryName(mode.categoryId) }}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let mode">{{ mode.type }}</td>
+      </ng-container>
+      <ng-container matColumnDef="openingBalance">
+        <th mat-header-cell *matHeaderCellDef>Opening Balance</th>
+        <td mat-cell *matCellDef="let mode">{{ mode.openingBalance }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let mode">
+          <span class="status-chip" [class.active]="mode.isActive">{{ mode.isActive ? 'Active' : 'Inactive' }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let mode" class="actions-cell">
+          <button mat-icon-button title="Edit" (click)="openEdit(mode)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  }
+</div>

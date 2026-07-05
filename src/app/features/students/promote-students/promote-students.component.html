@@ -1,0 +1,98 @@
+<div class="promote-students-page">
+  <h1>Promote Students</h1>
+
+  <form [formGroup]="form" class="promote-form">
+    <div class="session-group">
+      <h3>From</h3>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Source Session</mat-label>
+        <mat-select formControlName="sourceSessionId">
+          @for (session of sessions(); track session.id) {
+            <mat-option [value]="session.id">{{ session.start }} - {{ session.end }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Source Class - Section</mat-label>
+        <mat-select formControlName="sourceClassSectionId">
+          @for (cls of classSections(); track cls.id) {
+            @for (section of cls.sections; track section.id) {
+              <mat-option [value]="section.id">{{ cls.name }} - {{ section.name }}</mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="session-group">
+      <h3>To</h3>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Target Session</mat-label>
+        <mat-select formControlName="targetSessionId">
+          @for (session of sessions(); track session.id) {
+            <mat-option [value]="session.id">{{ session.start }} - {{ session.end }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Target Class - Section</mat-label>
+        <mat-select formControlName="targetClassSectionId">
+          @for (cls of classSections(); track cls.id) {
+            @for (section of cls.sections; track section.id) {
+              <mat-option [value]="section.id">{{ cls.name }} - {{ section.name }}</mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+
+  @if (loadingRoster()) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1, 2]; track i) {
+        <app-skeleton height="2rem" />
+      }
+    </div>
+  } @else if (roster().length === 0) {
+    <app-empty-state icon="groups" title="No roster loaded" description="Pick a source session and class-section to see students." />
+  } @else {
+    <div class="roster">
+      <mat-checkbox
+        [checked]="allSelected"
+        [indeterminate]="someSelected"
+        (change)="toggleAll($event.checked)"
+      >
+        Select all ({{ selectedStudentIds().size }} / {{ roster().length }})
+      </mat-checkbox>
+
+      <div class="roster-list">
+        @for (student of roster(); track student.id) {
+          <mat-checkbox [checked]="selectedStudentIds().has(student.id)" (change)="toggleStudent(student.id)">
+            {{ student.name }} @if (student.rollNumber) {
+              <span class="roll-number">(Roll {{ student.rollNumber }})</span>
+            }
+          </mat-checkbox>
+        }
+      </div>
+
+      <button mat-flat-button color="primary" [disabled]="promoting()" (click)="promote()">
+        @if (promoting()) {
+          <mat-spinner diameter="20" />
+        } @else {
+          Promote Selected
+        }
+      </button>
+    </div>
+  }
+
+  @if (result(); as promoteResult) {
+    <div class="result-card">
+      <p><strong>{{ promoteResult.promotedCount }}</strong> student(s) promoted.</p>
+      @if (promoteResult.alreadyPromotedStudentIds.length > 0) {
+        <p>{{ promoteResult.alreadyPromotedStudentIds.length }} student(s) were already in the target session and skipped.</p>
+      }
+    </div>
+  }
+</div>

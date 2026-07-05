@@ -1,0 +1,53 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+  </div>
+
+  @if (loading()) {
+    <div class="stat-grid">
+      @for (i of [0, 1, 2, 3]; track i) {
+        <div class="stat-skeleton">
+          <app-skeleton width="44px" height="44px" [circle]="true" />
+          <div class="stat-skeleton-lines">
+            <app-skeleton width="70%" height="0.75rem" />
+            <app-skeleton width="50%" height="1.25rem" />
+          </div>
+        </div>
+      }
+    </div>
+    <div class="chart-card">
+      <app-skeleton width="40%" height="1rem" />
+      <app-skeleton height="240px" />
+    </div>
+  } @else {
+    @if (summary(); as data) {
+      <div class="stat-grid">
+        <app-stat-tile label="Total Students" [value]="data.totalStudents" icon="school" accent="primary" />
+        <app-stat-tile label="Total Staff" [value]="data.totalStaff" icon="badge" accent="success" />
+        <app-stat-tile
+          label="Fee Collected"
+          [value]="(data.totalFeeCollected | number: '1.0-2') ?? data.totalFeeCollected"
+          icon="payments"
+          accent="warning"
+        />
+        <app-stat-tile
+          label="Avg. Attendance"
+          [value]="((data.averageAttendancePercentage | number: '1.0-1') ?? data.averageAttendancePercentage) + '%'"
+          icon="fact_check"
+          accent="danger"
+        />
+      </div>
+
+      @if (data.enrollmentByClass.length > 0) {
+        <div class="chart-card">
+          <h2>Enrollment by Class</h2>
+          <div class="chart-container">
+            <canvas baseChart type="bar" [data]="chartData()" [options]="chartOptions"></canvas>
+          </div>
+        </div>
+      }
+    } @else {
+      <app-empty-state icon="bar_chart" title="No dashboard data available" />
+    }
+  }
+</div>

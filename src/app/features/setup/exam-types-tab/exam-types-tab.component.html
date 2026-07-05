@@ -1,0 +1,88 @@
+<div class="exam-types-tab">
+  <div class="tab-header">
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Add Exam Type
+    </button>
+  </div>
+
+  @if (showForm()) {
+    <form [formGroup]="form" (ngSubmit)="save()" class="inline-form">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Type</mat-label>
+        <input matInput formControlName="type" placeholder="e.g. Half-Yearly" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.type" />
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Code</mat-label>
+        <input matInput formControlName="code" placeholder="e.g. HY" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.code" />
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Report Card?</mat-label>
+        <mat-select formControlName="isReportCard">
+          <mat-option value="Yes">Yes</mat-option>
+          <mat-option value="No">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Semester</mat-label>
+        <input matInput type="number" formControlName="semesterId" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.semesterId" />
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">Save</button>
+      </div>
+    </form>
+  }
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1]; track i) {
+        <app-skeleton height="2.5rem" />
+      }
+    </div>
+  } @else if (examTypes().length === 0) {
+    <app-empty-state icon="quiz" title="No exam types yet" description="Add one to get started." />
+  } @else {
+    <table mat-table [dataSource]="examTypes()" class="exam-types-table">
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let examType">{{ examType.type }}</td>
+      </ng-container>
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef>Code</th>
+        <td mat-cell *matCellDef="let examType">{{ examType.code }}</td>
+      </ng-container>
+      <ng-container matColumnDef="isReportCard">
+        <th mat-header-cell *matHeaderCellDef>Report Card</th>
+        <td mat-cell *matCellDef="let examType">{{ examType.isReportCard }}</td>
+      </ng-container>
+      <ng-container matColumnDef="semesterId">
+        <th mat-header-cell *matHeaderCellDef>Semester</th>
+        <td mat-cell *matCellDef="let examType">{{ examType.semesterId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let examType">
+          <span class="status-chip" [class.active]="examType.isActive">{{ examType.isActive ? 'Active' : 'Inactive' }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let examType" class="actions-cell">
+          <button mat-icon-button title="Edit" (click)="openEdit(examType)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  }
+</div>

@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+  @if (data.requireReason) {
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ data.reasonLabel ?? 'Reason' }}</mat-label>
+      <textarea matInput rows="3" [(ngModel)]="reason"></textarea>
+    </mat-form-field>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">{{ data.cancelLabel ?? 'Cancel' }}</button>
+  <button mat-flat-button [color]="data.danger ? 'warn' : 'primary'" [disabled]="!canConfirm" (click)="confirm()">
+    {{ data.confirmLabel ?? 'Confirm' }}
+  </button>
+</mat-dialog-actions>
