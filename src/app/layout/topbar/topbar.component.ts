@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { ROLE } from '../../core/constants/roles';
 import { SessionResponseDTO } from '../../core/models/setup.model';
 import { AuthService } from '../../core/services/auth.service';
+import { SchoolProfileContextService } from '../../core/services/school-profile-context.service';
 import { SessionContextService } from '../../core/services/session-context.service';
 import { SetupService } from '../../core/services/setup.service';
 import { ToastService } from '../../shared/toast/toast.service';
@@ -27,11 +28,14 @@ export class TopbarComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly setupService = inject(SetupService);
   private readonly sessionContext = inject(SessionContextService);
+  private readonly schoolProfileContext = inject(SchoolProfileContextService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
 
   readonly currentUser = this.authService.currentUser;
   readonly activeSession = this.sessionContext.activeSession;
+  readonly schoolName = () => this.schoolProfileContext.schoolProfile()?.name || 'School Management';
+  readonly logoUrl = this.schoolProfileContext.logoUrl;
   readonly isAdmin = () => this.authService.hasAnyRole(ROLE.Admin);
 
   readonly sessionOptions = signal<SessionResponseDTO[]>([]);

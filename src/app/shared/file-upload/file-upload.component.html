@@ -1,6 +1,12 @@
 @if (!file() && existingFileUrl && existingFileName) {
   <div class="existing-file">
-    <mat-icon>description</mat-icon>
+    @if (isExistingImage) {
+      <a [href]="existingFileUrl" target="_blank" rel="noopener">
+        <img [src]="existingFileUrl" [alt]="existingFileName" class="existing-image" />
+      </a>
+    } @else {
+      <mat-icon>description</mat-icon>
+    }
     <a [href]="existingFileUrl" target="_blank" rel="noopener" class="file-name">{{ existingFileName }}</a>
     <span class="existing-hint">Click below to replace</span>
   </div>

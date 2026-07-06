@@ -25,5 +25,13 @@
     emptyIcon="school"
     emptyTitle="No students found"
     emptyDescription="Add your first student to get started."
-  />
+  >
+    <ng-template appDataTableCell="photo" let-row>
+      @if (photoUrl(row); as url) {
+        <img [src]="url" [alt]="row.studentName" class="avatar" />
+      } @else {
+        <mat-icon class="avatar-placeholder">person</mat-icon>
+      }
+    </ng-template>
+  </app-data-table>
 </div>

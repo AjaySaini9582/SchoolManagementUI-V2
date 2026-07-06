@@ -47,6 +47,10 @@ export class FileUploadComponent implements ControlValueAccessor, OnDestroy {
     return this.file()?.type.startsWith('image/') ?? false;
   }
 
+  get isExistingImage(): boolean {
+    return /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(this.existingFileName ?? '');
+  }
+
   writeValue(value: File | null): void {
     this.setFile(value);
   }

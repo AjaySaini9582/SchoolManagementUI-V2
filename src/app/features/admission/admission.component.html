@@ -1,0 +1,102 @@
+<div class="admission-page">
+  <div class="page-header">
+    <h1>Admission Pipeline</h1>
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Add Enquiry
+    </button>
+  </div>
+
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab label="Enquiries">
+      <ng-template matTabContent>
+        <app-data-table
+          #enquiryTable
+          [columns]="baseColumns"
+          [fetchPage]="fetchApplications"
+          [filter]="enquiryFilter"
+          (rowClick)="openRecord($event)"
+          exportFilename="admission-enquiries"
+          emptyIcon="how_to_reg"
+          emptyTitle="No enquiries yet"
+          emptyDescription="Add your first enquiry to get started."
+        />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Pending Verification">
+      <ng-template matTabContent>
+        <app-data-table
+          #pendingTable
+          [columns]="pendingColumns"
+          [fetchPage]="fetchApplications"
+          [filter]="pendingFilter"
+          (rowClick)="openRecord($event)"
+          exportFilename="admission-pending"
+          emptyIcon="fact_check"
+          emptyTitle="Nothing awaiting verification"
+          emptyDescription="Submitted applications will appear here."
+        >
+          <ng-template appDataTableCell="actions" let-row>
+            <button mat-icon-button title="Approve" (click)="approve(row); $event.stopPropagation()">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button mat-icon-button title="Reject" (click)="reject(row); $event.stopPropagation()">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </ng-template>
+        </app-data-table>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Verified">
+      <ng-template matTabContent>
+        <app-data-table
+          #verifiedTable
+          [columns]="verifiedColumns"
+          [fetchPage]="fetchApplications"
+          [filter]="verifiedFilter"
+          (rowClick)="openRecord($event)"
+          exportFilename="admission-verified"
+          emptyIcon="verified"
+          emptyTitle="Nothing ready to confirm"
+          emptyDescription="Verified applications will appear here."
+        >
+          <ng-template appDataTableCell="actions" let-row>
+            <button mat-stroked-button (click)="confirmToStudent(row); $event.stopPropagation()">Confirm to Student</button>
+          </ng-template>
+        </app-data-table>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Rejected">
+      <ng-template matTabContent>
+        <app-data-table
+          [columns]="baseColumns"
+          [fetchPage]="fetchApplications"
+          [filter]="rejectedFilter"
+          (rowClick)="openRecord($event)"
+          exportFilename="admission-rejected"
+          emptyIcon="block"
+          emptyTitle="No rejected applications"
+          emptyDescription="Rejected applications will appear here."
+        />
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Confirmed">
+      <ng-template matTabContent>
+        <app-data-table
+          [columns]="baseColumns"
+          [fetchPage]="fetchApplications"
+          [filter]="confirmedFilter"
+          (rowClick)="openRecord($event)"
+          exportFilename="admission-confirmed"
+          emptyIcon="school"
+          emptyTitle="No confirmed admissions yet"
+          emptyDescription="Students confirmed from this pipeline will appear here."
+        />
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

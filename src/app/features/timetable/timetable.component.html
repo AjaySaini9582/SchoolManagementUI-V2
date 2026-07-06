@@ -1,0 +1,121 @@
+<div class="timetable-page">
+  <h1>Timetable</h1>
+
+  @if (loadingLookups()) {
+    <app-skeleton height="3rem" />
+  } @else {
+    <form [formGroup]="pickerForm" class="picker-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Class</mat-label>
+        <mat-select formControlName="classId">
+          @for (cls of classSections(); track cls.id) {
+            <mat-option [value]="cls.id">{{ cls.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Section</mat-label>
+        <mat-select formControlName="classSectionId">
+          @for (section of sectionsForSelectedClass(); track section.id) {
+            <mat-option [value]="section.id">{{ section.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    @if (pickerForm.controls.classSectionId.value) {
+      @if (showForm()) {
+        <form [formGroup]="form" (ngSubmit)="save()" class="inline-form">
+          <h3>{{ currentDayLabel() }} — Period Details</h3>
+          <div class="field-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Period #</mat-label>
+              <input matInput type="number" min="1" formControlName="periodNumber" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Subject</mat-label>
+              <mat-select formControlName="subjectId">
+                @for (subject of subjectsForSelectedClass(); track subject.id) {
+                  <mat-option [value]="subject.id">{{ subject.subjectName }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Teacher</mat-label>
+              <mat-select formControlName="teacherId">
+                @for (teacher of teachers(); track teacher.id) {
+                  <mat-option [value]="teacher.id">{{ teacher.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Start Time</mat-label>
+              <input matInput type="time" formControlName="startTime" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>End Time</mat-label>
+              <input matInput type="time" formControlName="endTime" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="cancel()">Cancel</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="saving()">Save</button>
+          </div>
+        </form>
+      }
+
+      @if (loadingTimetable()) {
+        <app-skeleton height="12rem" />
+      } @else {
+        <div class="days-grid">
+          @for (day of days; track day.value) {
+            <div class="day-column">
+              <div class="day-header">
+                <h3>{{ day.label }}</h3>
+                <button mat-icon-button title="Add period" (click)="openCreate(day.value)">
+                  <mat-icon>add_circle</mat-icon>
+                </button>
+              </div>
+              @if (periodsForDay(day.value).length === 0) {
+                <p class="no-periods">No periods</p>
+              } @else {
+                @for (period of periodsForDay(day.value); track period.id) {
+                  <div class="period-card">
+                    <div class="period-main">
+                      <span class="period-number">P{{ period.periodNumber }}</span>
+                      <span class="period-subject">{{ period.subjectName }}</span>
+                    </div>
+                    <div class="period-meta">
+                      @if (period.teacherName) {
+                        <span>{{ period.teacherName }}</span>
+                      }
+                      @if (period.startTime) {
+                        <span>{{ period.startTime }}–{{ period.endTime }}</span>
+                      }
+                    </div>
+                    <div class="period-actions">
+                      <button mat-icon-button title="Edit" (click)="openEdit(period)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button title="Remove" (click)="confirmDelete(period)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    } @else {
+      <app-empty-state icon="calendar_month" title="Pick a class and section" description="Choose a class section above to view or edit its timetable." />
+    }
+  }
+</div>

@@ -13,6 +13,7 @@ import { ExamService } from '../../../core/services/exam.service';
 import { SessionContextService } from '../../../core/services/session-context.service';
 import { SetupService } from '../../../core/services/setup.service';
 import { StudentService } from '../../../core/services/student.service';
+import { ConfirmDialogService } from '../../../shared/confirm-dialog/confirm-dialog.service';
 import { EmptyStateComponent } from '../../../shared/empty-state/empty-state.component';
 import { SkeletonComponent } from '../../../shared/skeleton/skeleton.component';
 import { ToastService } from '../../../shared/toast/toast.service';
@@ -46,12 +47,14 @@ export class MarksEntryComponent implements OnInit {
   private readonly studentService = inject(StudentService);
   private readonly examService = inject(ExamService);
   private readonly sessionContext = inject(SessionContextService);
+  private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly toast = inject(ToastService);
   private readonly formBuilder = inject(FormBuilder);
 
   readonly loading = signal(true);
   readonly loadingRows = signal(false);
   readonly saving = signal(false);
+  readonly notifying = signal(false);
 
   readonly classSections = signal<ClassWithSectionsDto[]>([]);
   readonly examTypes = signal<ExamTypeRequest[]>([]);
@@ -204,6 +207,43 @@ export class MarksEntryComponent implements OnInit {
           this.saving.set(false);
           this.toast.error('Unable to save marks right now.');
         },
+      });
+  }
+
+  notifyResults(): void {
+    const classSectionId = this.form.controls.classSectionId.value;
+    const examTypeId = this.form.controls.examTypeId.value;
+    if (!classSectionId || !examTypeId) {
+      this.toast.error('Pick a class section and exam type first.');
+      return;
+    }
+
+    this.confirmDialog
+      .confirm({
+        title: 'Notify exam results',
+        message: 'This will email/SMS parents of every student in this class section that results are published. Continue?',
+        confirmLabel: 'Notify Parents',
+      })
+      .subscribe((result) => {
+        if (!result) {
+          return;
+        }
+        this.notifying.set(true);
+        const sessionYearId = this.sessionContext.activeSession()?.id ?? null;
+        this.examService.notifyExamResults(classSectionId, examTypeId, sessionYearId).subscribe({
+          next: (response) => {
+            this.notifying.set(false);
+            if (response.isSuccess) {
+              this.toast.success(`Notified ${response.data} parent(s).`);
+            } else {
+              this.toast.error(response.errorMessage ?? 'Unable to notify parents.');
+            }
+          },
+          error: () => {
+            this.notifying.set(false);
+            this.toast.error('Unable to notify parents right now.');
+          },
+        });
       });
   }
 }

@@ -40,4 +40,8 @@ export class FeeService extends ApiBaseService {
   getCollectionReceipts(fromDate: string, toDate: string): Observable<BaseResponse<FeeReceiptDTO[]>> {
     return this.get('GetCollectionReceipts', { fromDate, toDate });
   }
+
+  sendFeeDueReminders(): Observable<BaseResponse<number>> {
+    return this.post('SendFeeDueReminders');
+  }
 }

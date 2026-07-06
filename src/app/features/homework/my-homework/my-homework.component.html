@@ -1,0 +1,27 @@
+<div class="my-homework-page">
+  <h1>My Homework</h1>
+
+  @if (loading()) {
+    <app-skeleton height="4rem" />
+  } @else if (homework().length === 0) {
+    <app-empty-state icon="menu_book" title="No homework yet" description="Your teacher hasn't posted any homework yet." />
+  } @else {
+    <div class="homework-list">
+      @for (item of homework(); track item.id) {
+        <div class="homework-card">
+          <div class="homework-card-header">
+            <span class="subject-chip">{{ item.subjectName }}</span>
+            <span class="homework-date">{{ item.homeworkDate | date: 'mediumDate' }}</span>
+          </div>
+          <h3>{{ item.title }}</h3>
+          @if (item.description) {
+            <p>{{ item.description }}</p>
+          }
+          @if (item.dueDate) {
+            <p class="due-date">Due: {{ item.dueDate | date: 'mediumDate' }}</p>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

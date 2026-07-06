@@ -3,7 +3,10 @@
     <mat-icon>menu</mat-icon>
   </button>
 
-  <span class="app-title">School Management</span>
+  @if (logoUrl(); as logo) {
+    <img [src]="logo" alt="" class="app-logo" />
+  }
+  <span class="app-title">{{ schoolName() }}</span>
 
   <span class="spacer"></span>
 

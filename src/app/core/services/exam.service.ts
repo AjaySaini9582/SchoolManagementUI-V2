@@ -30,4 +30,8 @@ export class ExamService extends ApiBaseService {
   ): Observable<BaseResponse<ReportCardDTO>> {
     return this.get('GetReportCard', { studentId, examTypeId, sessionYearId });
   }
+
+  notifyExamResults(classSectionId: number, examTypeId: number, sessionYearId?: number | null): Observable<BaseResponse<number>> {
+    return this.post('NotifyExamResults', undefined, { classSectionId, examTypeId, sessionYearId });
+  }
 }

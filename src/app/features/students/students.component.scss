@@ -17,3 +17,15 @@
   display: flex;
   gap: 0.5rem;
 }
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.avatar-placeholder {
+  color: rgba(0, 0, 0, 0.3);
+}

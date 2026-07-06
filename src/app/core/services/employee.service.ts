@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/base-response.model';
 import { DataTableRequest, DataTableResponse, ProcessesRequest } from '../models/data-table.model';
 import { Employee, EmployeeStoreProcedure } from '../models/employee.model';
-import { AddDocumentMasterList, DataAddedOrUpdated, DataExist } from '../models/shared.model';
+import { AddDocumentMasterList, DataAddedOrUpdated, DataExist, MasterApiResponseDTO } from '../models/shared.model';
 import { toFormData } from '../utils/form-data.util';
 import { ApiBaseService } from './api-base.service';
 
@@ -34,5 +34,9 @@ export class EmployeeService extends ApiBaseService {
 
   getEmployeeList(request: DataTableRequest<ProcessesRequest>): Observable<DataTableResponse<EmployeeStoreProcedure>> {
     return this.post('GetEmployeeList', request);
+  }
+
+  getAllTeachers(): Observable<BaseResponse<MasterApiResponseDTO[]>> {
+    return this.get('GetAllTeachers');
   }
 }

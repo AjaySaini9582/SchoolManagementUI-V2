@@ -101,6 +101,50 @@ export const routes: Routes = [
         loadComponent: () => import('./features/setup/setup.component').then((m) => m.SetupComponent),
       },
       {
+        path: 'school-profile',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./features/school-profile/school-profile.component').then((m) => m.SchoolProfileComponent),
+      },
+      {
+        path: 'admission',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./features/admission/admission.component').then((m) => m.AdmissionComponent),
+      },
+      {
+        path: 'admission/new',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./features/admission/admission-form/admission-form.component').then((m) => m.AdmissionFormComponent),
+      },
+      {
+        path: 'admission/:id',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./features/admission/admission-form/admission-form.component').then((m) => m.AdmissionFormComponent),
+      },
+      {
+        path: 'notice-board',
+        loadComponent: () => import('./features/notice-board/notice-board.component').then((m) => m.NoticeBoardComponent),
+      },
+      {
+        path: 'homework',
+        canActivate: [roleGuard(ROLE.Admin, ROLE.Teacher)],
+        loadComponent: () => import('./features/homework/homework.component').then((m) => m.HomeworkComponent),
+      },
+      {
+        path: 'my-homework',
+        canActivate: [roleGuard(ROLE.Student)],
+        loadComponent: () => import('./features/homework/my-homework/my-homework.component').then((m) => m.MyHomeworkComponent),
+      },
+      {
+        path: 'timetable',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./features/timetable/timetable.component').then((m) => m.TimetableComponent),
+      },
+      {
+        path: 'my-timetable',
+        canActivate: [roleGuard(ROLE.Student)],
+        loadComponent: () => import('./features/timetable/my-timetable/my-timetable.component').then((m) => m.MyTimetableComponent),
+      },
+      {
         path: 'document-verification',
         canActivate: [adminGuard],
         loadComponent: () =>

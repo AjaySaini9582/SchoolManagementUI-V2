@@ -9,6 +9,7 @@ import { forkJoin } from 'rxjs';
 
 import { FeeCollectionReportDTO, FeeReceiptDTO } from '../../../core/models/fee.model';
 import { FeeService } from '../../../core/services/fee.service';
+import { ConfirmDialogService } from '../../../shared/confirm-dialog/confirm-dialog.service';
 import { EmptyStateComponent } from '../../../shared/empty-state/empty-state.component';
 import { SkeletonComponent } from '../../../shared/skeleton/skeleton.component';
 import { ToastService } from '../../../shared/toast/toast.service';
@@ -29,10 +30,12 @@ function toLocalDateInput(date: Date): string {
 })
 export class CollectionReportComponent implements OnInit {
   private readonly feeService = inject(FeeService);
+  private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly toast = inject(ToastService);
   private readonly formBuilder = inject(FormBuilder);
 
   readonly loading = signal(false);
+  readonly sending = signal(false);
   readonly report = signal<FeeCollectionReportDTO | null>(null);
   readonly receipts = signal<FeeReceiptDTO[]>([]);
 
@@ -80,5 +83,34 @@ export class CollectionReportComponent implements OnInit {
         this.toast.error('Unable to load the collection report.');
       },
     });
+  }
+
+  sendReminders(): void {
+    this.confirmDialog
+      .confirm({
+        title: 'Send fee due reminders',
+        message: 'This will email/SMS every parent with an outstanding fee balance. Continue?',
+        confirmLabel: 'Send Reminders',
+      })
+      .subscribe((result) => {
+        if (!result) {
+          return;
+        }
+        this.sending.set(true);
+        this.feeService.sendFeeDueReminders().subscribe({
+          next: (response) => {
+            this.sending.set(false);
+            if (response.isSuccess) {
+              this.toast.success(`Reminders sent to ${response.data} parent(s).`);
+            } else {
+              this.toast.error(response.errorMessage ?? 'Unable to send reminders.');
+            }
+          },
+          error: () => {
+            this.sending.set(false);
+            this.toast.error('Unable to send reminders right now.');
+          },
+        });
+      });
   }
 }

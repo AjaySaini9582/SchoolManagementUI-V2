@@ -4,17 +4,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
 import { DataTableRequest, DataTableResponse, ProcessesRequest } from '../../core/models/data-table.model';
 import { StudentStoreProcedure } from '../../core/models/student.model';
 import { SessionContextService } from '../../core/services/session-context.service';
 import { StudentService } from '../../core/services/student.service';
+import { DataTableCellDirective } from '../../shared/data-table/data-table-cell.directive';
 import { DataTableComponent } from '../../shared/data-table/data-table.component';
 import { DataTableColumn } from '../../shared/data-table/data-table.model';
 
 @Component({
   selector: 'app-students',
   standalone: true,
-  imports: [DataTableComponent, MatButtonModule, MatIconModule],
+  imports: [DataTableCellDirective, DataTableComponent, MatButtonModule, MatIconModule],
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',
 })
@@ -40,6 +42,7 @@ export class StudentsComponent {
   }
 
   readonly columns: DataTableColumn<StudentStoreProcedure>[] = [
+    { key: 'photo', header: '', exportable: false },
     { key: 'studentName', header: 'Name', sortable: true },
     { key: 'fatherName', header: "Father's Name", sortable: true },
     { key: 'className', header: 'Class', sortable: true },
@@ -68,5 +71,9 @@ export class StudentsComponent {
 
   openEdit(row: StudentStoreProcedure): void {
     this.router.navigateByUrl(`/students/${row.id}`);
+  }
+
+  photoUrl(row: StudentStoreProcedure): string | null {
+    return row.photo ? `${environment.apiBaseUrl}/UploadFiles/Student/${row.id}/${row.photo}` : null;
   }
 }

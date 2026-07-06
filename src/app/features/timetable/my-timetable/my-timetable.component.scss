@@ -1,0 +1,57 @@
+.my-timetable-page {
+  padding: 1.5rem;
+
+  h1 {
+    margin: 0 0 1rem;
+  }
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.day-column {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 0.75rem;
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+.no-periods {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin: 0;
+}
+
+.period-card {
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.period-main {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  font-weight: 500;
+}
+
+.period-number {
+  opacity: 0.6;
+}
+
+.period-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  opacity: 0.7;
+  margin-top: 0.2rem;
+}

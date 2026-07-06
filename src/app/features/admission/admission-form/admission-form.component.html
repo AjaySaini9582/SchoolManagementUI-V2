@@ -1,0 +1,149 @@
+<div class="admission-form-page">
+  <h1>{{ isEdit ? 'Edit Application' : 'Add Enquiry' }}</h1>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else {
+    @if (isEdit) {
+      <p class="status-line">
+        Status: <strong>{{ ADMISSION_STATUS_LABEL[status()] ?? 'Unknown' }}</strong>
+        @if (rejectionReason()) {
+          — Rejection reason: {{ rejectionReason() }}
+        }
+      </p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submitApplication()">
+      <h3>Applicant Details</h3>
+      <div class="field-grid">
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Student Name</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+          <app-field-error [control]="form.controls.name" />
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Father's Name</mat-label>
+          <input matInput formControlName="fatherName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mother's Name</mat-label>
+          <input matInput formControlName="motherName" />
+        </mat-form-field>
+
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Contact Number</mat-label>
+            <input matInput formControlName="contactNumber" />
+          </mat-form-field>
+          <app-field-error [control]="form.controls.contactNumber" />
+        </div>
+
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+          </mat-form-field>
+          <app-field-error [control]="form.controls.email" />
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date of Birth</mat-label>
+          <input matInput type="date" formControlName="dob" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="genderId">
+            @for (option of genders(); track option.id) {
+              <mat-option [value]="option.id">{{ option.text }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <h3>Admission Details</h3>
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Class Applied For</mat-label>
+          <mat-select formControlName="classAppliedForId">
+            @for (cls of classSections(); track cls.id) {
+              <mat-option [value]="cls.id">{{ cls.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Admission Scheme</mat-label>
+          <mat-select formControlName="schemeId">
+            @for (option of admissionSchemes(); track option.id) {
+              <mat-option [value]="option.id">{{ option.text }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Admission Type</mat-label>
+          <mat-select formControlName="admissionTypeId">
+            @for (option of admissionTypes(); track option.id) {
+              <mat-option [value]="option.id">{{ option.text }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Source</mat-label>
+          <input matInput formControlName="source" placeholder="Walk-in / Phone / Website / Referral" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Address</mat-label>
+          <textarea matInput rows="2" formControlName="address"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Remarks</mat-label>
+          <textarea matInput rows="2" formControlName="remarks"></textarea>
+        </mat-form-field>
+      </div>
+
+      <h3>Documents</h3>
+      @if (documentRows().length === 0) {
+        <p>No document types are configured.</p>
+      } @else {
+        <div class="documents-grid">
+          @for (row of documentRows(); track row.documentMasterId) {
+            <div class="document-row">
+              <span class="document-name">{{ row.documentName }}</span>
+              <app-file-upload
+                [(ngModel)]="row.file"
+                [ngModelOptions]="{ standalone: true }"
+                [existingFileUrl]="documentUrl(row)"
+                [existingFileName]="row.existing?.fileName ?? null"
+              />
+            </div>
+          }
+        </div>
+      }
+
+      <div class="form-footer">
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        @if (canSaveAsEnquiry && !readOnly) {
+          <button mat-stroked-button type="button" [disabled]="saving()" (click)="saveAsEnquiry()">Save as Enquiry</button>
+        }
+        @if (!readOnly) {
+          <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+            @if (saving()) {
+              <mat-spinner diameter="20" />
+            } @else {
+              Submit Application
+            }
+          </button>
+        }
+      </div>
+    </form>
+  }
+</div>

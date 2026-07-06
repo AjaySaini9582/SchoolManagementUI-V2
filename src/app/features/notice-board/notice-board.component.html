@@ -1,0 +1,88 @@
+<div class="notice-board-page">
+  <div class="page-header">
+    <h1>Notice Board</h1>
+    @if (isAdmin()) {
+      <button mat-flat-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon>
+        Add Notice
+      </button>
+    }
+  </div>
+
+  @if (showForm()) {
+    <form [formGroup]="form" (ngSubmit)="save()" class="inline-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.title" />
+
+      <mat-form-field appearance="outline">
+        <mat-label>Body</mat-label>
+        <textarea matInput rows="4" formControlName="body"></textarea>
+      </mat-form-field>
+      <app-field-error [control]="form.controls.body" />
+
+      <div class="date-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>Published On</mat-label>
+          <input matInput type="date" formControlName="publishedOn" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Expiry Date (optional)</mat-label>
+          <input matInput type="date" formControlName="expiryDate" />
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">Save</button>
+      </div>
+    </form>
+  }
+
+  @if (loading()) {
+    <div class="skeleton-rows">
+      @for (i of [0, 1, 2]; track i) {
+        <app-skeleton height="6rem" />
+      }
+    </div>
+  } @else if (notices().length === 0) {
+    <app-empty-state icon="campaign" title="No notices" description="Nothing has been posted to the notice board yet." />
+  } @else {
+    <div class="notice-list">
+      @for (notice of notices(); track notice.id) {
+        <div class="notice-card" [class.inactive]="!notice.isActive || isExpired(notice)">
+          <div class="notice-card-header">
+            <h3>{{ notice.title }}</h3>
+            @if (!notice.isActive) {
+              <span class="status-chip">Removed</span>
+            } @else if (isExpired(notice)) {
+              <span class="status-chip">Expired</span>
+            }
+          </div>
+          <p class="notice-body">{{ notice.body }}</p>
+          <div class="notice-meta">
+            <span>Published {{ notice.publishedOn | date: 'mediumDate' }}</span>
+            @if (notice.expiryDate) {
+              <span>Expires {{ notice.expiryDate | date: 'mediumDate' }}</span>
+            }
+          </div>
+          @if (isAdmin()) {
+            <div class="notice-actions">
+              <button mat-icon-button title="Edit" (click)="openEdit(notice)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              @if (notice.isActive) {
+                <button mat-icon-button title="Remove" (click)="confirmDeactivate(notice)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

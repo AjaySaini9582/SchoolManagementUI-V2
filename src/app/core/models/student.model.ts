@@ -161,5 +161,6 @@ export interface StudentStoreProcedure {
   ledgerNumber: string | null;
   modified: string | null;
   status: boolean;
+  photo: string | null;
   totalCount: number;
 }

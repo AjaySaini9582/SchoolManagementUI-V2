@@ -4,9 +4,21 @@
   z-index: 10;
 }
 
+.app-logo {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+}
+
 .app-title {
   margin-left: 0.5rem;
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 260px;
 }
 
 .spacer {

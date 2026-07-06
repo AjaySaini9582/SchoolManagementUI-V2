@@ -39,6 +39,10 @@
         <mat-label>Max Marks</mat-label>
         <input matInput type="number" formControlName="maxMarks" />
       </mat-form-field>
+
+      <button mat-stroked-button color="warn" type="button" [disabled]="notifying()" (click)="notifyResults()">
+        {{ notifying() ? 'Notifying…' : 'Notify Exam Results' }}
+      </button>
     </form>
 
     @if (loadingRows()) {
