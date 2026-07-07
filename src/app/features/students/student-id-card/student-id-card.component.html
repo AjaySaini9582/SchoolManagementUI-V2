@@ -1,0 +1,60 @@
+<div class="id-card-page">
+  <div class="no-print toolbar">
+    <button mat-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Students
+    </button>
+    @if (student()) {
+      <button mat-flat-button color="primary" (click)="print()">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else if (!student()) {
+    <app-empty-state icon="badge" title="Student not found" description="Pick a student from the Students list to generate an ID card." />
+  } @else {
+    <div class="id-card">
+      <div class="id-card-header">
+        @if (logoUrl(); as logo) {
+          <img [src]="logo" alt="" class="school-logo" />
+        }
+        <div class="school-info">
+          <h2>{{ schoolProfile()?.name ?? 'School Name' }}</h2>
+          @if (schoolProfile()?.address) {
+            <p>{{ schoolProfile()?.address }}</p>
+          }
+        </div>
+      </div>
+
+      <div class="id-card-body">
+        <div class="photo-block">
+          @if (photoUrl(); as photo) {
+            <img [src]="photo" alt="" class="photo" />
+          } @else {
+            <div class="photo-placeholder"><mat-icon>person</mat-icon></div>
+          }
+        </div>
+        <div class="details-block">
+          <h3>{{ student()!.name }}</h3>
+          <div class="detail-row"><span>Class</span><span>{{ student()!.className }} - {{ student()!.sectionName }}</span></div>
+          <div class="detail-row"><span>Roll No.</span><span>{{ student()!.rollNumber ?? '—' }}</span></div>
+          <div class="detail-row"><span>Admission No.</span><span>{{ student()!.admissionNumber ?? '—' }}</span></div>
+          <div class="detail-row"><span>DOB</span><span>{{ student()!.dob ? (student()!.dob | date: 'mediumDate') : '—' }}</span></div>
+          <div class="detail-row"><span>Blood Group</span><span>{{ bloodGroupText() }}</span></div>
+          <div class="detail-row"><span>Contact</span><span>{{ student()!.contactNumber ?? '—' }}</span></div>
+        </div>
+      </div>
+
+      <div class="id-card-footer">
+        @if (activeSession(); as session) {
+          <span>Session {{ session.start }}-{{ session.end }}</span>
+        }
+        <span class="signature-line">Principal</span>
+      </div>
+    </div>
+  }
+</div>

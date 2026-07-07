@@ -1,0 +1,92 @@
+.certificate-page {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 1rem;
+}
+
+.certificate {
+  width: 700px;
+  max-width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+  min-height: 500px;
+}
+
+.letterhead {
+  width: 100%;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.fallback-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 2px solid #7c3aed;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin: 0.15rem 0 0;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+}
+
+.school-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.certificate-title {
+  text-align: center;
+  text-decoration: underline;
+  margin: 0 0 1.5rem;
+}
+
+.certificate-body {
+  line-height: 1.8;
+  text-align: justify;
+  margin: 0 0 1rem;
+}
+
+.certificate-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 3rem;
+}
+
+.signature-line {
+  border-top: 1px solid rgba(0, 0, 0, 0.6);
+  padding-top: 0.25rem;
+  min-width: 140px;
+  text-align: center;
+}
+
+@media print {
+  .certificate-page {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .certificate {
+    border: none;
+    width: auto;
+  }
+}

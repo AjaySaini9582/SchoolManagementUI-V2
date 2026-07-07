@@ -1,0 +1,28 @@
+<div class="my-books-page">
+  <h1>My Books</h1>
+
+  @if (loading()) {
+    <app-skeleton height="3rem" />
+  } @else if (issues().length === 0) {
+    <app-empty-state icon="import_contacts" title="No books issued" description="Books issued to you from the library will appear here." />
+  } @else {
+    <div class="book-list">
+      @for (row of issues(); track row.id) {
+        <div class="book-card">
+          <div class="book-info">
+            <span class="book-title">{{ row.bookTitle }}</span>
+            <span class="book-dates">
+              Issued {{ row.issueDate | date: 'mediumDate' }} — Due {{ row.dueDate | date: 'mediumDate' }}
+            </span>
+            @if (row.returnedDate) {
+              <span class="book-returned">Returned {{ row.returnedDate | date: 'mediumDate' }}</span>
+            }
+          </div>
+          <span class="status-chip" [class.overdue]="row.isOverdue" [class.returned]="row.status === BOOK_ISSUE_STATUS.Returned">
+            {{ row.isOverdue ? 'Overdue' : BOOK_ISSUE_STATUS_LABEL[row.status] }}
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

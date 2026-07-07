@@ -53,10 +53,16 @@
 .form-footer {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 0.75rem;
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.footer-spacer {
+  flex: 1 1 auto;
 }
 
 .transport-note {

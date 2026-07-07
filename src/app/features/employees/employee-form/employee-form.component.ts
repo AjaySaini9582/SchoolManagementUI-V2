@@ -3,6 +3,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
@@ -40,6 +41,7 @@ interface DocumentRow {
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
     MatSelectModule,
@@ -257,5 +259,9 @@ export class EmployeeFormComponent implements OnInit {
 
   cancel(): void {
     this.router.navigateByUrl('/employees');
+  }
+
+  openIdCard(): void {
+    this.router.navigateByUrl(`/employees/id-card?employeeId=${this.employeeId}`);
   }
 }

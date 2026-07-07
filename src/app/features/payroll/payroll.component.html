@@ -1,0 +1,103 @@
+<div class="payroll-page">
+  <div class="page-header">
+    <h1>Payroll</h1>
+    <form [formGroup]="form" class="month-picker">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Month</mat-label>
+        <input matInput type="month" formControlName="month" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="button" [disabled]="generating()" (click)="generate()">
+        <mat-icon>bolt</mat-icon>
+        Generate Payroll
+      </button>
+    </form>
+  </div>
+
+  @if (loading()) {
+    <app-skeleton height="3rem" />
+  } @else if (rows().length === 0) {
+    <app-empty-state icon="payments" title="No payroll for this month" description="Generate payroll to create records for active employees." />
+  } @else {
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="rows()" class="payroll-table">
+        <ng-container matColumnDef="employee">
+          <th mat-header-cell *matHeaderCellDef>Employee</th>
+          <td mat-cell *matCellDef="let row">{{ row.employeeName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="basic">
+          <th mat-header-cell *matHeaderCellDef>Basic</th>
+          <td mat-cell *matCellDef="let row">{{ row.basicSalary | number: '1.2-2' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="epf">
+          <th mat-header-cell *matHeaderCellDef>EPF</th>
+          <td mat-cell *matCellDef="let row">{{ row.epfDeduction | number: '1.2-2' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="eps">
+          <th mat-header-cell *matHeaderCellDef>EPS</th>
+          <td mat-cell *matCellDef="let row">{{ row.epsDeduction | number: '1.2-2' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lop">
+          <th mat-header-cell *matHeaderCellDef>LOP</th>
+          <td mat-cell *matCellDef="let row">{{ row.lossOfPayDays }} day(s) / {{ row.lossOfPayAmount | number: '1.2-2' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="otherDeductions">
+          <th mat-header-cell *matHeaderCellDef>Other Deductions</th>
+          <td mat-cell *matCellDef="let row">
+            @if (editingId() === row.id) {
+              <input
+                class="deduction-input"
+                type="number"
+                min="0"
+                [value]="editingDeduction()"
+                (input)="editingDeduction.set(+$any($event.target).value)"
+              />
+              <button mat-icon-button color="primary" (click)="saveDeduction(row)">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button mat-icon-button (click)="cancelEditDeduction()">
+                <mat-icon>close</mat-icon>
+              </button>
+            } @else {
+              {{ row.otherDeductions | number: '1.2-2' }}
+              @if (row.status === PAYROLL_STATUS.Draft) {
+                <button mat-icon-button (click)="startEditDeduction(row)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="net">
+          <th mat-header-cell *matHeaderCellDef>Net Salary</th>
+          <td mat-cell *matCellDef="let row"><strong>{{ row.netSalary | number: '1.2-2' }}</strong></td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="status-chip" [class.paid]="row.status === PAYROLL_STATUS.Paid">{{ PAYROLL_STATUS_LABEL[row.status] }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-button (click)="viewPayslip(row)">View</button>
+            @if (row.status === PAYROLL_STATUS.Draft) {
+              <button mat-stroked-button color="primary" (click)="markPaid(row)">Mark Paid</button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  }
+</div>

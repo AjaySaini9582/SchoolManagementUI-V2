@@ -1,0 +1,112 @@
+.payslip-page {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 1rem;
+}
+
+.payslip-document {
+  width: 600px;
+  max-width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+}
+
+.letterhead {
+  width: 100%;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.fallback-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  h1 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+}
+
+.school-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.payslip-title {
+  text-align: center;
+  text-decoration: underline;
+  margin: 0.5rem 0 1rem;
+}
+
+.payslip-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.payslip-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  td {
+    padding: 0.5rem 0.25rem;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.15);
+  }
+
+  .label {
+    opacity: 0.8;
+  }
+
+  .value {
+    text-align: right;
+    font-weight: 500;
+  }
+
+  .net-row td {
+    border-bottom: none;
+    border-top: 2px solid rgba(0, 0, 0, 0.4);
+    font-weight: 700;
+    padding-top: 0.75rem;
+  }
+}
+
+.payslip-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+}
+
+.signature-line {
+  border-top: 1px solid rgba(0, 0, 0, 0.6);
+  padding-top: 0.25rem;
+  min-width: 140px;
+  text-align: center;
+}
+
+@media print {
+  .payslip-page {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .payslip-document {
+    border: none;
+    width: auto;
+  }
+}

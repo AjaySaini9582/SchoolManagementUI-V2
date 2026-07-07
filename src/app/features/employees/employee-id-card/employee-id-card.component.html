@@ -1,0 +1,57 @@
+<div class="id-card-page">
+  <div class="no-print toolbar">
+    <button mat-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Employees
+    </button>
+    @if (employee()) {
+      <button mat-flat-button color="primary" (click)="print()">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else if (!employee()) {
+    <app-empty-state icon="badge" title="Employee not found" description="Pick an employee from the Employees list to generate an ID card." />
+  } @else {
+    <div class="id-card">
+      <div class="id-card-header">
+        @if (logoUrl(); as logo) {
+          <img [src]="logo" alt="" class="school-logo" />
+        }
+        <div class="school-info">
+          <h2>{{ schoolProfile()?.name ?? 'School Name' }}</h2>
+          @if (schoolProfile()?.address) {
+            <p>{{ schoolProfile()?.address }}</p>
+          }
+        </div>
+      </div>
+
+      <div class="id-card-body">
+        <div class="photo-block">
+          @if (photoUrl(); as photo) {
+            <img [src]="photo" alt="" class="photo" />
+          } @else {
+            <div class="photo-placeholder"><mat-icon>person</mat-icon></div>
+          }
+        </div>
+        <div class="details-block">
+          <h3>{{ employee()!.name }}</h3>
+          <div class="detail-row"><span>Designation</span><span>{{ designationName() }}</span></div>
+          <div class="detail-row"><span>Department</span><span>{{ departmentName() }}</span></div>
+          <div class="detail-row"><span>Employee ID</span><span>{{ employee()!.id }}</span></div>
+          <div class="detail-row"><span>Blood Group</span><span>{{ bloodGroupText() }}</span></div>
+          <div class="detail-row"><span>Contact</span><span>{{ employee()!.contactNumber ?? '—' }}</span></div>
+        </div>
+      </div>
+
+      <div class="id-card-footer">
+        <span>{{ employee()!.email }}</span>
+        <span class="signature-line">Principal</span>
+      </div>
+    </div>
+  }
+</div>

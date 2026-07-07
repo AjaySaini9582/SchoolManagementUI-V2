@@ -15,10 +15,12 @@ export class SchoolProfileContextService {
 
   private readonly schoolProfileSignal = signal<SchoolProfile | null>(null);
   private readonly logoUrlSignal = signal<string | null>(null);
+  private readonly letterheadUrlSignal = signal<string | null>(null);
   private loaded = false;
 
   readonly schoolProfile = this.schoolProfileSignal.asReadonly();
   readonly logoUrl = this.logoUrlSignal.asReadonly();
+  readonly letterheadUrl = this.letterheadUrlSignal.asReadonly();
 
   load(): Observable<SchoolProfile | null> {
     if (this.loaded) {
@@ -35,6 +37,13 @@ export class SchoolProfileContextService {
         this.logoUrlSignal.set(
           data && logoDoc?.fileName ? `${environment.apiBaseUrl}/UploadFiles/School/${data.id}/${logoDoc.fileName}` : null,
         );
+
+        const letterheadMasterId = documentTypes.data?.find((doc) => doc.documentName === SCHOOL_DOCUMENT_NAME.Letterhead)?.id ?? null;
+        const letterheadDoc = data?.uploadDocumentDTO?.find((doc) => doc.schoolDocumentMasterId === letterheadMasterId) ?? null;
+        this.letterheadUrlSignal.set(
+          data && letterheadDoc?.fileName ? `${environment.apiBaseUrl}/UploadFiles/School/${data.id}/${letterheadDoc.fileName}` : null,
+        );
+
         return data;
       }),
       tap((profile) => {

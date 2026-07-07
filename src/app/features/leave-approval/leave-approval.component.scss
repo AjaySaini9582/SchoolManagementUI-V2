@@ -1,0 +1,95 @@
+.leave-approval-page {
+  padding: 1.5rem;
+  max-width: 800px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.filter-select {
+  width: 160px;
+}
+
+.leave-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.leave-card {
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.leave-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.employee-name {
+  font-weight: 600;
+}
+
+.leave-type {
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  margin-left: auto;
+
+  &.approved {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.rejected {
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  &.pending {
+    background: #fff8e1;
+    color: #f57f17;
+  }
+}
+
+.leave-dates {
+  margin: 0.2rem 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.leave-reason {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+}
+
+.rejection-reason {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  color: #c62828;
+}
+
+.leave-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}

@@ -39,4 +39,8 @@ export class EmployeeService extends ApiBaseService {
   getAllTeachers(): Observable<BaseResponse<MasterApiResponseDTO[]>> {
     return this.get('GetAllTeachers');
   }
+
+  getActiveEmployeeRoster(departmentId?: number | null): Observable<BaseResponse<MasterApiResponseDTO[]>> {
+    return this.get('GetActiveEmployeeRoster', { departmentId });
+  }
 }

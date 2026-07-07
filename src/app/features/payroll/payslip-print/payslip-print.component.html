@@ -1,0 +1,76 @@
+<div class="payslip-page">
+  <div class="no-print toolbar">
+    <button mat-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </button>
+    @if (payslip()) {
+      <button mat-flat-button color="primary" (click)="print()">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else if (!payslip()) {
+    <app-empty-state icon="payments" title="Payslip not found" description="This payslip does not exist or you don't have access to it." />
+  } @else {
+    <div class="payslip-document">
+      @if (letterheadUrl(); as letterhead) {
+        <img [src]="letterhead" alt="" class="letterhead" />
+      } @else {
+        <div class="fallback-header">
+          @if (logoUrl(); as logo) {
+            <img [src]="logo" alt="" class="school-logo" />
+          }
+          <h1>{{ schoolProfile()?.name ?? 'School Name' }}</h1>
+        </div>
+      }
+
+      <h2 class="payslip-title">Payslip — {{ monthLabel() }}</h2>
+
+      <div class="payslip-meta">
+        <span>Employee: {{ payslip()!.employeeName }}</span>
+        @if (payslip()!.paidOn) {
+          <span>Paid on: {{ payslip()!.paidOn | date: 'mediumDate' }}</span>
+        }
+      </div>
+
+      <table class="payslip-table">
+        <tbody>
+          <tr>
+            <td class="label">Basic Salary</td>
+            <td class="value">{{ payslip()!.basicSalary | number: '1.2-2' }}</td>
+          </tr>
+          <tr>
+            <td class="label">EPF Deduction</td>
+            <td class="value">{{ payslip()!.epfDeduction | number: '1.2-2' }}</td>
+          </tr>
+          <tr>
+            <td class="label">EPS Deduction</td>
+            <td class="value">{{ payslip()!.epsDeduction | number: '1.2-2' }}</td>
+          </tr>
+          <tr>
+            <td class="label">Loss of Pay ({{ payslip()!.lossOfPayDays }} day(s))</td>
+            <td class="value">{{ payslip()!.lossOfPayAmount | number: '1.2-2' }}</td>
+          </tr>
+          <tr>
+            <td class="label">Other Deductions</td>
+            <td class="value">{{ payslip()!.otherDeductions | number: '1.2-2' }}</td>
+          </tr>
+          <tr class="net-row">
+            <td class="label">Net Salary</td>
+            <td class="value">{{ payslip()!.netSalary | number: '1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="payslip-footer">
+        <span class="signature-line">Accounts</span>
+        <span class="signature-line">Authorized Signatory</span>
+      </div>
+    </div>
+  }
+</div>

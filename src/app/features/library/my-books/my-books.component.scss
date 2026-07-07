@@ -1,0 +1,65 @@
+.my-books-page {
+  padding: 1.5rem;
+  max-width: 700px;
+
+  h1 {
+    margin: 0 0 1rem;
+  }
+}
+
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.book-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  gap: 1rem;
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.book-title {
+  font-weight: 600;
+}
+
+.book-dates {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.book-returned {
+  font-size: 0.8rem;
+  color: #2e7d32;
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: #fff8e1;
+  color: #f57f17;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  &.returned {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.overdue {
+    background: #ffebee;
+    color: #c62828;
+  }
+}

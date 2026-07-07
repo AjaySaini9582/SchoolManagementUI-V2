@@ -479,6 +479,21 @@
       </mat-stepper>
 
       <div class="form-footer">
+        @if (isEdit) {
+          <button mat-stroked-button type="button" (click)="openIdCard()">
+            <mat-icon>badge</mat-icon>
+            ID Card
+          </button>
+          <button mat-stroked-button type="button" (click)="openBonafideCertificate()">
+            <mat-icon>description</mat-icon>
+            Bonafide Certificate
+          </button>
+          <button mat-stroked-button type="button" (click)="openTransferCertificate()">
+            <mat-icon>assignment_return</mat-icon>
+            Transfer Certificate
+          </button>
+        }
+        <span class="footer-spacer"></span>
         <button mat-button type="button" (click)="cancel()">Cancel</button>
         <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
           @if (saving()) {

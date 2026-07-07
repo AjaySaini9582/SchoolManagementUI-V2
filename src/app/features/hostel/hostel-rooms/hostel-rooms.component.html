@@ -1,0 +1,71 @@
+<div class="hostel-rooms-page">
+  <div class="section-header">
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Add Room
+    </button>
+  </div>
+
+  @if (showForm()) {
+    <form [formGroup]="form" (ngSubmit)="save()" class="inline-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Hostel Block</mat-label>
+        <input matInput formControlName="hostelBlock" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.hostelBlock" />
+
+      <mat-form-field appearance="outline">
+        <mat-label>Room Number</mat-label>
+        <input matInput formControlName="roomNumber" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.roomNumber" />
+
+      <mat-form-field appearance="outline">
+        <mat-label>Capacity</mat-label>
+        <input matInput type="number" min="1" formControlName="capacity" />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.capacity" />
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">Save</button>
+      </div>
+    </form>
+  }
+
+  @if (loading()) {
+    <app-skeleton height="3rem" />
+  } @else if (rooms().length === 0) {
+    <app-empty-state icon="bed" title="No rooms yet" description="Add a hostel room to start allocating students." />
+  } @else {
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="rooms()" class="room-table">
+        <ng-container matColumnDef="block">
+          <th mat-header-cell *matHeaderCellDef>Block</th>
+          <td mat-cell *matCellDef="let row">{{ row.hostelBlock }}</td>
+        </ng-container>
+        <ng-container matColumnDef="room">
+          <th mat-header-cell *matHeaderCellDef>Room</th>
+          <td mat-cell *matCellDef="let row">{{ row.roomNumber }}</td>
+        </ng-container>
+        <ng-container matColumnDef="occupancy">
+          <th mat-header-cell *matHeaderCellDef>Occupied / Capacity</th>
+          <td mat-cell *matCellDef="let row">{{ row.occupiedCount }} / {{ row.capacity }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row" class="actions-cell">
+            <button mat-icon-button title="Edit" (click)="openEdit(row)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button title="Remove" (click)="confirmDeactivate(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  }
+</div>

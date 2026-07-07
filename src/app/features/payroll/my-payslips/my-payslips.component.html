@@ -1,0 +1,27 @@
+<div class="my-payslips-page">
+  <h1>My Payslips</h1>
+
+  @if (loading()) {
+    <app-skeleton height="3rem" />
+  } @else if (payslips().length === 0) {
+    <app-empty-state icon="payments" title="No payslips yet" description="Your payslips will appear here once payroll has been generated." />
+  } @else {
+    <div class="payslip-list">
+      @for (row of payslips(); track row.id) {
+        <div class="payslip-card">
+          <div class="payslip-info">
+            <span class="payslip-month">{{ monthLabel(row) }}</span>
+            <span class="payslip-net">Net: {{ row.netSalary | number: '1.2-2' }}</span>
+            @if (row.paidOn) {
+              <span class="payslip-paid">Paid on {{ row.paidOn | date: 'mediumDate' }}</span>
+            }
+          </div>
+          <button mat-stroked-button color="primary" (click)="view(row)">
+            <mat-icon>visibility</mat-icon>
+            View
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

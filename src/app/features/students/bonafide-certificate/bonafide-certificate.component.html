@@ -1,0 +1,62 @@
+<div class="certificate-page">
+  <div class="no-print toolbar">
+    <button mat-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Students
+    </button>
+    @if (student()) {
+      <button mat-flat-button color="primary" (click)="print()">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else if (!student()) {
+    <app-empty-state icon="description" title="Student not found" description="Pick a student from the Students list to generate a bonafide certificate." />
+  } @else {
+    <div class="certificate">
+      @if (letterheadUrl(); as letterhead) {
+        <img [src]="letterhead" alt="" class="letterhead" />
+      } @else {
+        <div class="fallback-header">
+          @if (logoUrl(); as logo) {
+            <img [src]="logo" alt="" class="school-logo" />
+          }
+          <div>
+            <h1>{{ schoolProfile()?.name ?? 'School Name' }}</h1>
+            @if (schoolProfile()?.address) {
+              <p>{{ schoolProfile()?.address }}</p>
+            }
+          </div>
+        </div>
+      }
+
+      <h2 class="certificate-title">Bonafide Certificate</h2>
+
+      <p class="certificate-body">
+        This is to certify that <strong>{{ student()!.name }}</strong>
+        @if (student()!.fatherName) {
+          , son/daughter of <strong>{{ student()!.fatherName }}</strong>,
+        }
+        is a bonafide student of this school, currently studying in class
+        <strong>{{ student()!.className }} - {{ student()!.sectionName }}</strong>
+        @if (activeSession(); as session) {
+          during the academic session <strong>{{ session.start }}-{{ session.end }}</strong>.
+        }
+        @if (student()!.dob) {
+          His/Her date of birth as per school records is <strong>{{ student()!.dob | date: 'longDate' }}</strong>.
+        }
+      </p>
+
+      <p class="certificate-body">This certificate is issued on request for whatever purpose it may serve.</p>
+
+      <div class="certificate-footer">
+        <span>Date: {{ today | date: 'longDate' }}</span>
+        <span class="signature-line">Principal</span>
+      </div>
+    </div>
+  }
+</div>

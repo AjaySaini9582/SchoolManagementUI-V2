@@ -1,0 +1,39 @@
+.book-catalog-page {
+  padding: 1rem 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.inline-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.book-table {
+  width: 100%;
+}
+
+.actions-cell {
+  text-align: right;
+  white-space: nowrap;
+}

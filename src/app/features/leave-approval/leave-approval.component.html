@@ -1,0 +1,53 @@
+<div class="leave-approval-page">
+  <div class="page-header">
+    <h1>Leave Approval</h1>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-select">
+      <mat-label>Status</mat-label>
+      <mat-select [value]="filterStatus()" (selectionChange)="onFilterChange($event.value)">
+        <mat-option [value]="null">All</mat-option>
+        <mat-option [value]="LEAVE_STATUS.Pending">Pending</mat-option>
+        <mat-option [value]="LEAVE_STATUS.Approved">Approved</mat-option>
+        <mat-option [value]="LEAVE_STATUS.Rejected">Rejected</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <app-skeleton height="3rem" />
+  } @else if (leaves().length === 0) {
+    <app-empty-state icon="event_available" title="No leave requests" description="Nothing matches this filter." />
+  } @else {
+    <div class="leave-list">
+      @for (leave of leaves(); track leave.id) {
+        <div class="leave-card">
+          <div class="leave-card-header">
+            <span class="employee-name">{{ leave.employeeName }}</span>
+            <span class="leave-type">{{ leave.leaveType }}</span>
+            <span class="status-chip" [class]="LEAVE_STATUS_LABEL[leave.status]?.toLowerCase()">{{ LEAVE_STATUS_LABEL[leave.status] }}</span>
+          </div>
+          <p class="leave-dates">
+            {{ leave.fromDate | date: 'mediumDate' }} – {{ leave.toDate | date: 'mediumDate' }} ({{ leave.totalDays }} day(s))
+          </p>
+          @if (leave.reason) {
+            <p class="leave-reason">{{ leave.reason }}</p>
+          }
+          @if (leave.rejectionReason) {
+            <p class="rejection-reason">Rejected: {{ leave.rejectionReason }}</p>
+          }
+          @if (leave.status === LEAVE_STATUS.Pending) {
+            <div class="leave-actions">
+              <button mat-stroked-button color="primary" (click)="approve(leave)">
+                <mat-icon>check_circle</mat-icon>
+                Approve
+              </button>
+              <button mat-stroked-button color="warn" (click)="reject(leave)">
+                <mat-icon>cancel</mat-icon>
+                Reject
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -211,6 +211,13 @@
       }
 
       <div class="form-footer">
+        @if (isEdit) {
+          <button mat-stroked-button type="button" (click)="openIdCard()">
+            <mat-icon>badge</mat-icon>
+            ID Card
+          </button>
+        }
+        <span class="footer-spacer"></span>
         <button mat-button type="button" (click)="cancel()">Cancel</button>
         <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
           @if (saving()) {

@@ -1,0 +1,183 @@
+<div class="tc-form-page">
+  <h1>Transfer Certificate{{ isAlreadyIssued() ? ' (Issued)' : '' }}</h1>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else if (!student()) {
+    <p>Student not found.</p>
+  } @else {
+    @if (isAlreadyIssued()) {
+      <p class="already-issued-note">
+        A transfer certificate has already been issued for this student. You can edit and re-save the details below, or
+        <button type="button" class="link-button" (click)="viewCertificate()">view/print it</button>.
+      </p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <h3>Certificate Details</h3>
+      <div class="field-grid">
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>TC Number</mat-label>
+            <input matInput formControlName="tcNumber" />
+          </mat-form-field>
+          <app-field-error [control]="form.controls.tcNumber" />
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>TC Date</mat-label>
+          <input matInput type="date" formControlName="tcDate" />
+        </mat-form-field>
+      </div>
+
+      <h3>Pupil Details</h3>
+      <div class="field-grid">
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Name of Pupil</mat-label>
+            <input matInput formControlName="nameOfPupil" />
+          </mat-form-field>
+          <app-field-error [control]="form.controls.nameOfPupil" />
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name of Father/Mother/Guardian</mat-label>
+          <input matInput formControlName="nameOfFatherMotherGuardian" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nationality</mat-label>
+          <input matInput formControlName="nationality" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option value="General">General</mat-option>
+            <mat-option value="OBC">OBC</mat-option>
+            <mat-option value="SC">SC</mat-option>
+            <mat-option value="ST">ST</mat-option>
+            <mat-option value="EWS">EWS</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date of Birth</mat-label>
+          <input matInput type="date" formControlName="dateOfBirth" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date of First Admission</mat-label>
+          <input matInput type="date" formControlName="dateOfFirstAdmission" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Admission Number</mat-label>
+          <input matInput formControlName="admissionNumber" />
+        </mat-form-field>
+      </div>
+
+      <h3>Academic Record</h3>
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Class Last Studied</mat-label>
+          <input matInput formControlName="classLastStudied" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Duration of Stay</mat-label>
+          <input matInput formControlName="durationOfStay" placeholder="e.g. 2020 to 2026" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Last Exam Result</mat-label>
+          <input matInput formControlName="lastExamResult" placeholder="e.g. Passed Half-Yearly 2026" />
+        </mat-form-field>
+
+        <mat-checkbox formControlName="failedInSameClass">Failed in the same class</mat-checkbox>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Subjects Studied</mat-label>
+          <input matInput formControlName="subjectsStudied" />
+        </mat-form-field>
+
+        <mat-checkbox formControlName="qualifiedForPromotion">Qualified for promotion</mat-checkbox>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Promoted to Class</mat-label>
+          <input matInput formControlName="promotedToClass" />
+        </mat-form-field>
+      </div>
+
+      <h3>Attendance &amp; Fees</h3>
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Total Working Days</mat-label>
+          <input matInput type="number" formControlName="totalWorkingDays" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Total Present Days</mat-label>
+          <input matInput type="number" formControlName="totalPresentDays" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fees Paid Up To Month</mat-label>
+          <input matInput formControlName="feesPaidUpToMonth" placeholder="e.g. March 2026" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fee Concession Availed</mat-label>
+          <input matInput formControlName="feeConcessionAvailed" />
+        </mat-form-field>
+      </div>
+
+      <h3>Conduct &amp; Leaving Details</h3>
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Extra-Curricular Activities</mat-label>
+          <input matInput formControlName="extraCurricularActivities" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>General Conduct</mat-label>
+          <mat-select formControlName="generalConduct">
+            <mat-option value="Excellent">Excellent</mat-option>
+            <mat-option value="Very Good">Very Good</mat-option>
+            <mat-option value="Good">Good</mat-option>
+            <mat-option value="Satisfactory">Satisfactory</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date of Leaving</mat-label>
+          <input matInput type="date" formControlName="dateOfLeaving" />
+        </mat-form-field>
+
+        <div class="field-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Reason for Leaving</mat-label>
+            <input matInput formControlName="reasonForLeaving" />
+          </mat-form-field>
+          <app-field-error [control]="form.controls.reasonForLeaving" />
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Remarks</mat-label>
+          <textarea matInput rows="2" formControlName="remarks"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-footer">
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+          @if (saving()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            Generate &amp; Print
+          }
+        </button>
+      </div>
+    </form>
+  }
+</div>

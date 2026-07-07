@@ -1,0 +1,61 @@
+.issue-returns-page {
+  padding: 1rem 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-select {
+  width: 160px;
+  margin-right: auto;
+}
+
+.inline-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.issues-table {
+  width: 100%;
+}
+
+.borrower-type {
+  opacity: 0.6;
+  font-size: 0.8rem;
+}
+
+.overdue {
+  color: #c62828;
+}
+
+.overdue-tag {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: #ffebee;
+  color: #c62828;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}

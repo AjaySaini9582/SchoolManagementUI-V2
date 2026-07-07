@@ -1,0 +1,89 @@
+<div class="my-leave-page">
+  <div class="page-header">
+    <h1>My Leave</h1>
+    <button mat-flat-button color="primary" (click)="openApply()">
+      <mat-icon>add</mat-icon>
+      Apply for Leave
+    </button>
+  </div>
+
+  @if (loading()) {
+    <app-skeleton height="3rem" />
+  } @else {
+    @if (balance(); as bal) {
+      <div class="balance-card">
+        <div class="balance-cell">
+          <span class="balance-label">Annual Entitlement</span>
+          <span class="balance-value">{{ bal.annualEntitlementDays }} days</span>
+        </div>
+        <div class="balance-cell">
+          <span class="balance-label">Used This Year</span>
+          <span class="balance-value">{{ bal.usedDays }} days</span>
+        </div>
+        <div class="balance-cell">
+          <span class="balance-label">Remaining</span>
+          <span class="balance-value">{{ bal.remainingDays }} days</span>
+        </div>
+      </div>
+    }
+
+    @if (showForm()) {
+      <form [formGroup]="form" (ngSubmit)="save()" class="inline-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Leave Type</mat-label>
+          <mat-select formControlName="leaveType">
+            <mat-option value="Casual Leave">Casual Leave</mat-option>
+            <mat-option value="Sick Leave">Sick Leave</mat-option>
+            <mat-option value="Earned Leave">Earned Leave</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="date-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>From</mat-label>
+            <input matInput type="date" formControlName="fromDate" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>To</mat-label>
+            <input matInput type="date" formControlName="toDate" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Reason</mat-label>
+          <textarea matInput rows="2" formControlName="reason"></textarea>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="cancel()">Cancel</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="saving()">Submit</button>
+        </div>
+      </form>
+    }
+
+    @if (leaves().length === 0) {
+      <app-empty-state icon="event_busy" title="No leave requests" description="Your leave applications will appear here." />
+    } @else {
+      <div class="leave-list">
+        @for (leave of leaves(); track leave.id) {
+          <div class="leave-card">
+            <div class="leave-card-header">
+              <span class="leave-type">{{ leave.leaveType }}</span>
+              <span class="status-chip" [class]="LEAVE_STATUS_LABEL[leave.status]?.toLowerCase()">{{ LEAVE_STATUS_LABEL[leave.status] }}</span>
+            </div>
+            <p class="leave-dates">
+              {{ leave.fromDate | date: 'mediumDate' }} – {{ leave.toDate | date: 'mediumDate' }} ({{ leave.totalDays }} day(s))
+            </p>
+            @if (leave.reason) {
+              <p class="leave-reason">{{ leave.reason }}</p>
+            }
+            @if (leave.rejectionReason) {
+              <p class="rejection-reason">Rejected: {{ leave.rejectionReason }}</p>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

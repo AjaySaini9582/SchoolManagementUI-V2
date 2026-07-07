@@ -1,0 +1,69 @@
+<div class="monthly-register">
+  @if (loading()) {
+    <div class="skeleton-rows">
+      <app-skeleton height="2.5rem" />
+      <app-skeleton height="2.5rem" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="picker-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="departmentId">
+          <mat-option [value]="null">All Departments</mat-option>
+          @for (dept of departments(); track dept.id) {
+            <mat-option [value]="dept.id">{{ dept.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Month</mat-label>
+        <input matInput type="month" formControlName="month" />
+      </mat-form-field>
+    </form>
+
+    @if (loadingRegister()) {
+      <div class="skeleton-rows">
+        <app-skeleton height="2.5rem" />
+        <app-skeleton height="2.5rem" />
+      </div>
+    } @else if (!register()) {
+      <app-empty-state icon="event_note" title="No register to show" description="Pick a month to load the staff attendance register." />
+    } @else if (register()!.employees.length === 0) {
+      <app-empty-state icon="event_note" title="No employees found" description="No active employees found for this department." />
+    } @else {
+      <div class="register-scroll">
+        <table class="register-table">
+          <thead>
+            <tr>
+              <th class="col-name">Employee</th>
+              @for (day of dayNumbers(); track day) {
+                <th class="col-day">{{ day }}</th>
+              }
+              <th class="col-summary">Present</th>
+              <th class="col-summary">Total</th>
+              <th class="col-summary">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of register()!.employees; track row.employeeId) {
+              <tr>
+                <td class="col-name">{{ row.employeeName }}</td>
+                @for (day of row.days; track day.date) {
+                  <td class="col-day">
+                    <span class="status-dot" [class]="statusClass(day.statusName)" [title]="day.statusName ?? 'Not marked'">
+                      {{ abbreviate(day.statusName) }}
+                    </span>
+                  </td>
+                }
+                <td class="col-summary">{{ row.presentCount }}</td>
+                <td class="col-summary">{{ row.totalMarkedDays }}</td>
+                <td class="col-summary">{{ row.attendancePercentage }}%</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</div>

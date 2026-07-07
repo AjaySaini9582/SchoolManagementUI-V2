@@ -410,4 +410,16 @@ export class StudentFormComponent implements OnInit {
   cancel(): void {
     this.router.navigateByUrl('/students');
   }
+
+  openIdCard(): void {
+    this.router.navigateByUrl(`/students/id-card?studentId=${this.studentId}`);
+  }
+
+  openBonafideCertificate(): void {
+    this.router.navigateByUrl(`/students/bonafide-certificate?studentId=${this.studentId}`);
+  }
+
+  openTransferCertificate(): void {
+    this.router.navigateByUrl(`/students/transfer-certificate?studentId=${this.studentId}`);
+  }
 }

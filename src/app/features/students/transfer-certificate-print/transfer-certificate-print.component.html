@@ -1,0 +1,92 @@
+<div class="tc-page">
+  <div class="no-print toolbar">
+    <button mat-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Students
+    </button>
+    @if (certificate()) {
+      <button mat-flat-button color="primary" (click)="print()">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else if (!certificate()) {
+    <app-empty-state
+      icon="description"
+      title="No transfer certificate found"
+      description="Generate a transfer certificate for this student first."
+    />
+  } @else {
+    <div class="tc-document">
+      @if (letterheadUrl(); as letterhead) {
+        <img [src]="letterhead" alt="" class="letterhead" />
+      } @else {
+        <div class="fallback-header">
+          @if (logoUrl(); as logo) {
+            <img [src]="logo" alt="" class="school-logo" />
+          }
+          <h1>{{ schoolProfile()?.name ?? 'School Name' }}</h1>
+        </div>
+      }
+
+      <h2 class="tc-title">Transfer Certificate</h2>
+      <p class="tc-affiliation">
+        @if (schoolProfile()?.affiliationName) {
+          Affiliated to {{ schoolProfile()?.affiliationName }}
+        }
+        @if (schoolProfile()?.udiseCode) {
+          — UDISE: {{ schoolProfile()?.udiseCode }}
+        }
+      </p>
+
+      <div class="tc-meta">
+        <span>TC No: {{ certificate()!.tcNumber }}</span>
+        <span>Date: {{ certificate()!.tcDate | date: 'longDate' }}</span>
+      </div>
+
+      <ol class="tc-fields">
+        <li><span class="label">Name of the Pupil</span><span class="value">{{ certificate()!.nameOfPupil }}</span></li>
+        <li><span class="label">Name of Father / Mother / Guardian</span><span class="value">{{ certificate()!.nameOfFatherMotherGuardian || '—' }}</span></li>
+        <li><span class="label">Nationality</span><span class="value">{{ certificate()!.nationality || '—' }}</span></li>
+        <li><span class="label">Category (SC/ST/OBC/EWS/General)</span><span class="value">{{ certificate()!.category || '—' }}</span></li>
+        <li><span class="label">Date of First Admission</span><span class="value">{{ certificate()!.dateOfFirstAdmission ? (certificate()!.dateOfFirstAdmission | date: 'longDate') : '—' }}</span></li>
+        <li><span class="label">Admission Number</span><span class="value">{{ certificate()!.admissionNumber || '—' }}</span></li>
+        <li><span class="label">Date of Birth (as per admission register)</span><span class="value">{{ certificate()!.dateOfBirth ? (certificate()!.dateOfBirth | date: 'longDate') : '—' }}</span></li>
+        <li><span class="label">Class Last Studied</span><span class="value">{{ certificate()!.classLastStudied || '—' }}</span></li>
+        <li><span class="label">Duration of Stay in the School</span><span class="value">{{ certificate()!.durationOfStay || '—' }}</span></li>
+        <li><span class="label">Last Examination Taken and Result</span><span class="value">{{ certificate()!.lastExamResult || '—' }}</span></li>
+        <li><span class="label">Whether Failed in the Same Class</span><span class="value">{{ certificate()!.failedInSameClass ? 'Yes' : 'No' }}</span></li>
+        <li><span class="label">Subjects Studied</span><span class="value">{{ certificate()!.subjectsStudied || '—' }}</span></li>
+        <li>
+          <span class="label">Whether Qualified for Promotion to Higher Class</span>
+          <span class="value">
+            {{ certificate()!.qualifiedForPromotion ? 'Yes' : 'No' }}
+            @if (certificate()!.qualifiedForPromotion && certificate()!.promotedToClass) {
+              (to {{ certificate()!.promotedToClass }})
+            }
+          </span>
+        </li>
+        <li><span class="label">Fees Paid Up To</span><span class="value">{{ certificate()!.feesPaidUpToMonth || '—' }}</span></li>
+        <li><span class="label">Fee Concession Availed, If Any</span><span class="value">{{ certificate()!.feeConcessionAvailed || 'None' }}</span></li>
+        <li><span class="label">Total Working Days</span><span class="value">{{ certificate()!.totalWorkingDays ?? '—' }}</span></li>
+        <li><span class="label">Total Days Present</span><span class="value">{{ certificate()!.totalPresentDays ?? '—' }}</span></li>
+        <li><span class="label">Games Played / Extra-Curricular Activities</span><span class="value">{{ certificate()!.extraCurricularActivities || '—' }}</span></li>
+        <li><span class="label">General Conduct</span><span class="value">{{ certificate()!.generalConduct || '—' }}</span></li>
+        <li><span class="label">Date of Application for Certificate / Date on Which Pupil Left School</span><span class="value">{{ certificate()!.dateOfLeaving | date: 'longDate' }}</span></li>
+        <li><span class="label">Reason for Leaving School</span><span class="value">{{ certificate()!.reasonForLeaving || '—' }}</span></li>
+        @if (certificate()!.remarks) {
+          <li><span class="label">Remarks</span><span class="value">{{ certificate()!.remarks }}</span></li>
+        }
+      </ol>
+
+      <div class="tc-footer">
+        <span class="signature-line">Class Teacher</span>
+        <span class="signature-line">Principal</span>
+      </div>
+    </div>
+  }
+</div>

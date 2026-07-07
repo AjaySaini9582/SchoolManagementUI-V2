@@ -1,0 +1,14 @@
+<div class="my-room-page">
+  <h1>My Room</h1>
+
+  @if (loading()) {
+    <app-skeleton height="3rem" />
+  } @else if (!allocation()) {
+    <app-empty-state icon="bed" title="No room allocated" description="You haven't been allocated a hostel room yet." />
+  } @else {
+    <div class="room-card">
+      <span class="room-label">{{ allocation()!.hostelBlock }} - {{ allocation()!.roomNumber }}</span>
+      <span class="room-dates">Allocated since {{ allocation()!.allocationDate | date: 'mediumDate' }}</span>
+    </div>
+  }
+</div>

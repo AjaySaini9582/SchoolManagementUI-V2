@@ -91,6 +91,12 @@ export interface Student {
   uploadDocument: UploadDocument[] | null;
   generatedUserName: string | null;
   generatedPassword: string | null;
+  /** Display-only — populated by GetStudentDetail for ID cards/certificates;
+   * omitted entirely when building a create/update request. */
+  photo?: string | null;
+  className?: string | null;
+  sectionName?: string | null;
+  genderName?: string | null;
 }
 
 export interface PromoteStudentsRequest {

@@ -1,0 +1,92 @@
+.monthly-register {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.picker-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.register-scroll {
+  overflow-x: auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.register-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.8rem;
+
+  th,
+  td {
+    padding: 0.4rem 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    white-space: nowrap;
+  }
+
+  thead th {
+    background: rgba(0, 0, 0, 0.03);
+    font-weight: 500;
+  }
+
+  .col-name {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    background: #fff;
+    min-width: 140px;
+  }
+
+  .col-summary {
+    font-weight: 500;
+  }
+}
+
+.status-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.06);
+
+  &.present {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.absent {
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  &.leave {
+    background: #fff8e1;
+    color: #f57f17;
+  }
+
+  &.holiday {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+
+  &.half-day {
+    background: #f3e5f5;
+    color: #6a1b9a;
+  }
+}
