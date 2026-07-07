@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { forkJoin } from 'rxjs';
+import { Observable, forkJoin, of, switchMap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { MASTER_KEY, MasterKeyDataValue } from '../../core/models/master.model';
@@ -231,24 +231,47 @@ export class SchoolProfileComponent implements OnInit {
       uploadDocumentDTO: documents.length > 0 ? documents : null,
     };
 
+    // Every save adds a brand-new Tb_School_Upload_Document row for any
+    // attached file — it never replaces the old one. So when the user is
+    // re-uploading a logo/letterhead that already exists, delete the old
+    // document (removes the DB row + physical file) first, or saving would
+    // leave the previous file orphaned on disk and duplicated in the DB.
+    const staleDocumentIds: number[] = [];
+    if (value.logoFile && this.existingLogo()) {
+      staleDocumentIds.push(this.existingLogo()!.id);
+    }
+    if (value.letterheadFile && this.existingLetterhead()) {
+      staleDocumentIds.push(this.existingLetterhead()!.id);
+    }
+
+    // forkJoin([]) completes without ever emitting a value, so switchMap
+    // would never fire and this would hang forever when there's nothing to
+    // delete — fall back to of(null) in that case instead.
+    const deleteStaleDocuments$: Observable<unknown> =
+      staleDocumentIds.length > 0
+        ? forkJoin(staleDocumentIds.map((id) => this.schoolService.deleteSchoolDocument(id)))
+        : of(null);
+
     this.saving.set(true);
-    this.schoolService.addOrUpdateSchoolData(profile).subscribe({
-      next: (response) => {
-        this.saving.set(false);
-        if (response.isSuccess) {
-          this.toast.success('School profile saved.');
-          this.form.patchValue({ logoFile: null, letterheadFile: null });
-          this.schoolProfileContext.refresh();
-          this.reload();
-        } else {
-          this.toast.error(response.errorMessage ?? 'Unable to save the school profile.');
-        }
-      },
-      error: () => {
-        this.saving.set(false);
-        this.toast.error('Unable to save the school profile right now.');
-      },
-    });
+    deleteStaleDocuments$
+      .pipe(switchMap(() => this.schoolService.addOrUpdateSchoolData(profile)))
+      .subscribe({
+        next: (response) => {
+          this.saving.set(false);
+          if (response.isSuccess) {
+            this.toast.success('School profile saved.');
+            this.form.patchValue({ logoFile: null, letterheadFile: null });
+            this.schoolProfileContext.refresh();
+            this.reload();
+          } else {
+            this.toast.error(response.errorMessage ?? 'Unable to save the school profile.');
+          }
+        },
+        error: () => {
+          this.saving.set(false);
+          this.toast.error('Unable to save the school profile right now.');
+        },
+      });
   }
 
   private reload(): void {
