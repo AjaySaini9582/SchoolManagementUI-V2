@@ -41,11 +41,6 @@ export class MasterService extends ApiBaseService {
     return this.casteCategoryMaster$;
   }
 
-  /** Cascades from a Religion Id — not cached, since it varies per selection. */
-  getAllCasteCategoryById(religionId: number): Observable<BaseResponse<MasterApiResponseDTO[]>> {
-    return this.get('GetAllCasteCategoryListById', { Id: religionId });
-  }
-
   /** Batched lookup for one or more `MASTER_KEY` groups, e.g.
    * `getMasterKeyData([MASTER_KEY.Gender, MASTER_KEY.BloodGroup])`. */
   getMasterKeyData(keyList: number[]): Observable<BaseResponse<MasterKeyDataValue[]>> {

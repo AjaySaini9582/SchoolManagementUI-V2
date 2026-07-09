@@ -192,6 +192,7 @@ export class StudentFormComponent implements OnInit {
       ]),
       banks: this.masterService.getAllBankMaster(),
       houses: this.setupService.getAllHouse(),
+      casteCategories: this.masterService.getAllCasteCategoryMaster(),
       documentTypes: this.studentService.getAddDocumentMasterList(),
     }).subscribe({
       next: (result) => {
@@ -199,6 +200,7 @@ export class StudentFormComponent implements OnInit {
         this.sessions.set(result.sessions.data ?? []);
         this.banks.set(result.banks.data ?? []);
         this.houses.set(result.houses.data ?? []);
+        this.casteCategories.set(result.casteCategories.data ?? []);
 
         const keyData = result.genderData.data ?? [];
         this.genders.set(keyData.filter((item) => item.keyId === MASTER_KEY.Gender));
@@ -216,14 +218,6 @@ export class StudentFormComponent implements OnInit {
         }
       },
       error: () => this.toast.error('Unable to load form lookups.'),
-    });
-
-    this.form.controls.studentAdmissionDetail.controls.religionId.valueChanges.subscribe((religionId) => {
-      this.form.controls.studentAdmissionDetail.controls.casteCategoryId.setValue(null);
-      this.casteCategories.set([]);
-      if (religionId) {
-        this.masterService.getAllCasteCategoryById(religionId).subscribe((response) => this.casteCategories.set(response.data ?? []));
-      }
     });
   }
 
@@ -262,12 +256,6 @@ export class StudentFormComponent implements OnInit {
   private patchForm(student: Student): void {
     this.existingIsBus = student.studentAdmissionDetail.isBus;
     this.existingBusStoppageId = student.studentAdmissionDetail.busStoppageId;
-
-    if (student.studentAdmissionDetail.religionId) {
-      this.masterService
-        .getAllCasteCategoryById(student.studentAdmissionDetail.religionId)
-        .subscribe((response) => this.casteCategories.set(response.data ?? []));
-    }
 
     this.form.patchValue({
       name: student.name,
